@@ -1,0 +1,46 @@
+<div class="dialog-container brand-dialog">
+  <h2 mat-dialog-title>{{ dialogTitle }}</h2>
+
+  <form [formGroup]="brandForm" (ngSubmit)="onSubmit()">
+    <div mat-dialog-content>
+      <div class="form-field">
+        <label for="name">Brand Name</label>
+        <input
+          type="text"
+          id="name"
+          formControlName="name"
+          placeholder="Enter brand name"
+        />
+        <div
+          class="error-message"
+          *ngIf="
+            brandForm.get('name')?.invalid && brandForm.get('name')?.touched
+          "
+        >
+          Brand name is required
+        </div>
+      </div>
+
+      <!-- <div class="form-field">
+          <label>Brand Logo</label>
+          <div class="logo-upload">
+            <div class="logo-preview" *ngIf="previewUrl">
+              <img [src]="previewUrl" alt="Brand logo preview">
+            </div>
+            <div class="upload-button">
+              <button type="button" (click)="fileInput.click()">
+                <span class="material-icons">upload</span>
+                <span>Upload Logo</span>
+              </button>
+              <input type="file" #fileInput style="display: none" (change)="onFileSelected($event)" accept="image/*">
+            </div>
+          </div>
+        </div> -->
+    </div>
+
+    <div mat-dialog-actions>
+      <button type="button" (click)="onCancel()">Cancel</button>
+      <button type="submit" [disabled]="brandForm.invalid">Save</button>
+    </div>
+  </form>
+</div>

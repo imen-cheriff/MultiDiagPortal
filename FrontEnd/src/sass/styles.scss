@@ -1,0 +1,226 @@
+// @import "bootstrap/dist/css/bootstrap.min.css";
+// @import "@ng-select/ng-select/themes/default.theme.css";
+@import '@angular/material/prebuilt-themes/deeppurple-amber.css';
+
+$font-family-base: 'Open Sans', 'Arial';
+
+$navbar-height: 48px;
+
+$primary-text-color: #546472;
+$secondary-text-color: #939598;
+
+$primary-background-color: #f8f9fa;
+$secondary-background-color: #d4d5d6;
+
+$input-background-color: #edf4f5;
+$primary-input-color: #edf4f5;
+
+$btn-default-color: #546472;
+$btn-primary-color: #6fa87e;
+$btn-secondary-color: #2bc3ea;
+$btn-gray-color: #f6f8fb;
+$btn-danger-color: #d50f25;
+$btn-warning-color: #eeb211;
+$btn-success-color: #009653;
+
+$pastel-delete-color: #d4373d;
+
+html, body, app-root {
+  height: 100%;
+  width: 100%;
+  font-family: $font-family-base;
+  font-size: 12px;
+  background-color: $primary-background-color;
+  color: $secondary-text-color !important;
+  overflow: hidden;
+}
+
+.ng-valid[required], .ng-valid.required {
+  border-left: 5px solid green; /* green */
+}
+
+.ng-invalid:not(form) {
+  border-left: 5px solid darkred; /* red */
+}
+
+.full-container-main {
+  height: calc(100% - #{$navbar-height});
+  height: -webkit-calc(100% - #{$navbar-height});
+  height: -moz-calc(100% - #{$navbar-height});
+  width: calc(100%);
+  width: -webkit-calc(100%);
+  width: -moz-calc(100%);
+  margin: 0;
+  
+}
+
+.full-container-main-login {
+ 
+  width: calc(100%);
+  width: -webkit-calc(100%);
+  width: -moz-calc(100%);
+  margin: 0;
+  background: url("../assets/home-background.svg") no-repeat top left;
+  background-size: auto 100%
+}
+
+a {
+  color: #546472 !important;
+  text-decoration: none
+}
+
+.primary-background-color {
+  background-color: $primary-background-color !important;
+}
+
+h1, h2, h3 {
+  color: $primary-text-color;
+}
+
+h1 {
+  margin-top: 5px;
+  margin-left: 5px;
+  padding: 5px;
+}
+
+.blue {
+  color: $btn-secondary-color;
+}
+//////////
+
+
+///////////////////
+.pointer {
+  cursor: pointer;
+}
+
+.loader-overlay {
+  position: absolute;
+  height: 100%;
+  width:100%;
+  top:0;
+  left: 0;
+  opacity: 0.2;
+  background-color: white;
+  z-index: 500000;
+}
+
+.disabled {
+  cursor: not-allowed;
+}
+
+.overflow {
+  overflow: auto;
+}
+
+.overflow-hidden {
+  overflow: hidden;
+}
+
+.stretch {
+  display: flex;
+  flex-grow: 1;
+}
+
+.fit {
+  display: flex;
+  flex-shrink: 0;
+}
+
+.row label:not(.btn){
+  font-weight: bold;
+  color: $secondary-text-color;
+}
+
+/*==========================================================================
+Material design cards
+==========================================================================*/
+
+.card {
+  background: #fff;
+  border-radius: 1px;
+  padding: 5px;
+  margin: 10px;
+  flex-grow: 1;
+  min-width:0 ;
+  height: 90vh; 
+}
+ 
+.card-in-row {
+  height: 100%; 
+  margin: 0;
+}
+
+.card-z1 {
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12), 0 1px 2px rgba(0, 0, 0, 0.24);
+  transition: all 0.2s ease-in-out;
+}
+
+.card-z2 {
+  box-shadow: 0 3px 6px rgba(0, 0, 0, 0.16), 0 3px 6px rgba(0, 0, 0, 0.23);
+}
+
+.card-z3 {
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.19), 0 6px 6px rgba(0, 0, 0, 0.23);
+}
+
+.card-z4 {
+  box-shadow: 0 14px 28px rgba(0, 0, 0, 0.25), 0 10px 10px rgba(0, 0, 0, 0.22);
+}
+
+.card-z5 {
+  box-shadow: 0 19px 38px rgba(0, 0, 0, 0.30), 0 15px 12px rgba(0, 0, 0, 0.22);
+}
+
+.card-profile {
+  background: #f8f9fa;
+  border-radius: 1px;
+  padding: 5px;
+  margin: 10px;
+  flex-grow: 1;
+  min-width:0 ;
+  border-radius: 8px;
+  height: 60vh; 
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12), 0 1px 2px rgba(0, 0, 0, 0.24);
+  transition: all 0.2s ease-in-out;
+}
+
+
+/*==========================================================================
+Panels
+==========================================================================*/
+.panel-h1 {
+  font-size: 2.5rem;
+  border-bottom: 2px solid $primary-text-color;
+  color: $primary-text-color;
+  padding-bottom: 8px;
+  margin-bottom: 8px;
+  margin-left: 8px;
+  margin-right: 8px;
+  font-weight: 600;
+  text-transform: uppercase;
+}
+
+.panel-h2 {
+  font-size: 2rem;
+  border-bottom: 2px solid $primary-text-color;
+  color: $primary-text-color;
+  padding-bottom: 8px;
+  margin-bottom: 8px;
+  margin-left: 8px;
+  margin-right: 8px;
+  font-weight: 600;
+  text-transform: uppercase;
+}
+
+.panel-h3 {
+  font-size: 16px;
+  border-bottom: 2px solid $primary-text-color;
+  color: $primary-text-color;
+  padding-bottom: 8px;
+  margin-bottom: 8px;
+  margin-left: 8px;
+  margin-right: 8px;
+  font-weight: 600;
+  text-transform: uppercase;
+}

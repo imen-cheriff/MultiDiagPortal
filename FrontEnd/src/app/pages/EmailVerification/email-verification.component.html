@@ -1,0 +1,30 @@
+<div class="verification-container">
+  <div class="verification-card">
+    <h2>Email Verification</h2>
+
+    <div *ngIf="isLoading" class="loading">
+      <div class="spinner"></div>
+      <p>Verifying your email address...</p>
+    </div>
+
+    <div *ngIf="!isLoading && isSuccess" class="success">
+      <div class="success-icon">✓</div>
+      <h3>Success!</h3>
+      <p>Your email has been successfully verified.</p>
+      <p>You will be redirected to the login page shortly...</p>
+      <a [routerLink]="['/login']" class="btn btn-primary">Go to Login</a>
+    </div>
+
+    <div *ngIf="!isLoading && !isSuccess" class="error">
+      <div class="error-icon">✗</div>
+      <h3>Verification Failed</h3>
+      <p>{{ errorMessage }}</p>
+      <div class="actions">
+        <button (click)="resendVerification()" class="btn btn-primary">
+          Resend Verification Email
+        </button>
+        <a [routerLink]="['/login']" class="btn btn-secondary">Back to Login</a>
+      </div>
+    </div>
+  </div>
+</div>

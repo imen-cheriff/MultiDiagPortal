@@ -1,0 +1,736 @@
+// ========================================
+// VARIABLES & MIXINS
+// ========================================
+
+// Colors
+$color-primary: #a8d5ba;
+$color-primary-light: #6fa87e;
+$color-primary-dark: #547d5f;
+$color-secondary: #64748b;
+$color-success: #10b981;
+$color-danger: #ef4444;
+$color-warning: #f59e0b;
+$color-info: #3b82f6;
+
+$color-text-primary: #1e293b;
+$color-text-secondary: #64748b;
+$color-text-tertiary: #94a3b8;
+$color-text-light: #f8fafc;
+
+$color-background: #f8fafc;
+$color-background-light: #ffffff;
+$color-background-dark: #f1f5f9;
+$color-background-hover: #f1f5f9;
+
+$color-border: #e2e8f0;
+$color-border-light: #f1f5f9;
+$color-border-focus: #818cf8;
+
+// Typography
+$font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+$font-size-xs: 0.75rem;   // 12px
+$font-size-sm: 0.875rem;  // 14px
+$font-size-md: 1rem;      // 16px
+$font-size-lg: 1.4rem;  // 18px
+$font-size-xl: 1.25rem;   // 20px
+$font-size-2xl: 1.8rem;   // 24px
+
+// Spacing
+$spacing-xs: 0.25rem;   // 4px
+$spacing-sm: 0.5rem;    // 8px
+$spacing-md: 1rem;      // 16px
+$spacing-lg: 1.5rem;    // 24px
+$spacing-xl: 2rem;      // 32px
+$spacing-2xl: 2.5rem;   // 40px
+$spacing-3xl: 3rem;     // 48px
+
+// Borders
+$border-radius-sm: 0.25rem;  // 4px
+$border-radius-md: 0.375rem; // 6px
+$border-radius-lg: 0.5rem;   // 8px
+$border-radius-xl: 0.75rem;  // 12px
+$border-radius-full: 9999px;
+
+// Shadows
+$shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+$shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+$shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+$shadow-xl: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+
+// Transitions
+$transition-fast: 150ms ease;
+$transition-normal: 250ms ease;
+$transition-slow: 350ms ease;
+
+// Breakpoints
+$breakpoint-sm: 640px;
+$breakpoint-md: 768px;
+$breakpoint-lg: 1024px;
+$breakpoint-xl: 1280px;
+
+// Mixins
+@mixin flex($direction: row, $justify: flex-start, $align: stretch, $wrap: nowrap) {
+  display: flex;
+  flex-direction: $direction;
+  justify-content: $justify;
+  align-items: $align;
+  flex-wrap: $wrap;
+}
+
+@mixin responsive($breakpoint) {
+  @if $breakpoint == sm {
+    @media (min-width: $breakpoint-sm) { @content; }
+  } @else if $breakpoint == md {
+    @media (min-width: $breakpoint-md) { @content; }
+  } @else if $breakpoint == lg {
+    @media (min-width: $breakpoint-lg) { @content; }
+  } @else if $breakpoint == xl {
+    @media (min-width: $breakpoint-xl) { @content; }
+  }
+}
+
+@mixin card {
+  background-color: $color-background-light;
+  border-radius: $border-radius-lg;
+  box-shadow: $shadow-md;
+  border: 1px solid $color-border-light;
+  overflow: hidden;
+  transition: box-shadow $transition-normal, transform $transition-normal;
+  
+  &:hover {
+    box-shadow: $shadow-lg;
+  }
+}
+
+@mixin input-focus {
+  &:focus {
+    outline: none;
+    border-color: $color-primary;
+    box-shadow: 0 0 0 3px rgba($color-primary, 0.15);
+  }
+}
+
+// ========================================
+// BASE STYLES
+// ========================================
+
+:host {
+  display: block;
+  font-family: $font-family;
+  color: $color-text-primary;
+}
+
+// ========================================
+// LAYOUT COMPONENTS
+// ========================================
+
+.user-panel {
+  @include flex(column);
+  // background-color:#e5eae8; //change to the color
+  border-radius: $border-radius-lg;
+  box-shadow: $shadow-lg;
+  width: 100%;
+  max-width: 1000px;
+  margin: 0 auto;
+  overflow: hidden;
+  position: relative;
+  min-height: 846px; //change to the height
+  
+  &__header {
+    @include flex(row, space-between, center);
+    padding: $spacing-lg $spacing-xl;
+    // background: linear-gradient(135deg, $color-primary-dark, $color-primary);
+    color: $color-text-light;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  }
+  
+  &__title {
+    @include flex(row, flex-start, center);
+    gap: $spacing-md;
+    
+    .material-icons {
+      font-size: $font-size-2xl;
+      // background: linear-gradient(135deg, $color-primary-dark, $color-primary);
+      -webkit-background-clip: text;
+      background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+    
+    h1 {
+      font-size: $font-size-xl;
+      font-weight: 600;
+      margin: 0;
+      
+      @include responsive(md) {
+        font-size: $font-size-2xl;
+      }
+    }
+  }
+  
+  &__content {
+    flex: 1;
+    padding: $spacing-xl;
+    overflow-y: auto;
+  }
+  
+  &__empty-state {
+    @include flex(column, center, center);
+    height: 100%;
+    min-height: 400px;
+  }
+}
+
+// ========================================
+// EMPTY STATE
+// ========================================
+
+.empty-state {
+  @include flex(column, center, center);
+  text-align: center;
+  padding: $spacing-xl;
+  max-width: 400px;
+  margin-top: 15em; //change to the position
+  
+  &__icon {
+    @include flex(row, center, center);
+    width: 80px;
+    height: 80px;
+    border-radius: 50%;
+    // background-color: rgba($color-primary, 0.1);
+    // background-color: #e5eae8; //change to the color
+    margin-bottom: -10px;
+    
+    .material-icons {
+      font-size: 40px;
+      color: $color-primary;
+    }
+  }
+  
+  &__title {
+    font-size: $font-size-xl;
+    font-weight: 600;
+    margin: 0 0 $spacing-md;
+    color: $color-text-primary;
+  }
+  
+  &__message {
+    font-size: $font-size-md;
+    color: $color-text-secondary;
+    // margin: 0 0 $spacing-xl;
+    margin-top: -10px
+  }
+}
+
+// ========================================
+// USER FORM
+// ========================================
+
+.user-form {
+  @include flex(column);
+  gap: $spacing-xl;
+  animation: fadeIn 0.3s ease-out;
+
+  
+  &__container {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: $spacing-xl;
+
+    
+    @include responsive(md) {
+      grid-template-columns: 3fr 2fr;
+    }
+  }
+  
+  &__section {
+    @include card;
+    padding: $spacing-lg;
+    border: 1px solid rgb(220, 218, 218);
+    // box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1), 0 -4px 60px rgba(0, 0, 0, 0.1);
+    max-height: 80vh;
+    
+    
+    @include responsive(md) {
+      padding: $spacing-xl;
+    }
+  }
+  
+  &__actions {
+    @include flex(row, flex-end, center);
+    gap: $spacing-md;
+    margin-top: $spacing-lg;
+    
+    @include responsive(md) {
+      display: none; // Hide on desktop as we use the edit bar
+    }
+  }
+}
+
+// ========================================
+// SECTION COMPONENTS
+// ========================================
+
+.section-header {
+  @include flex(row, flex-start, center);
+  gap: $spacing-sm;
+  margin-bottom: $spacing-lg;
+  padding-bottom: $spacing-md;
+  border-bottom: 1px solid $color-border;
+  
+  .material-icons {
+    font-size: $font-size-xl;
+    color: $color-primary;
+  }
+  
+  h2 {
+    font-size: $font-size-lg;
+    font-weight: 600;
+    margin: 0;
+    color: $color-text-primary;
+  }
+}
+
+// ========================================
+// FORM FIELDS
+// ========================================
+
+.form-fields {
+  @include flex(column);
+  gap: $spacing-lg;
+}
+
+.form-field {
+  @include flex(column);
+  gap: $spacing-sm;
+  position: relative;
+  
+  &-group {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: $spacing-lg;
+    
+    @include responsive(sm) {
+      grid-template-columns: 1fr 1fr;
+    }
+  }
+  
+  &__label {
+    @include flex(row, flex-start, center);
+    gap: $spacing-xs;
+    font-size: $font-size-sm;
+    font-weight: 500;
+    color: $color-text-secondary;
+    margin-bottom: -2px;
+    
+    .material-icons {
+      font-size: $font-size-sm;
+      color: $color-primary;
+    }
+  }
+  
+  &__input-wrapper {
+    position: relative;
+  }
+  
+  &__input {
+    width: 100%;
+    height: 60%;
+    padding: $spacing-md;
+    font-size: $font-size-sm;
+    color: $color-text-primary;
+    background-color: $color-background-light;
+    border: 1px solid #d0d0d0;
+    border-radius: $border-radius-md;
+    transition: all $transition-normal;
+
+    &:focus {
+      border-color: $color-primary;
+      box-shadow: 0 0 0 3px rgba($color-primary, 0.15);
+    }
+    
+    
+    @include input-focus;
+    
+    &.is-invalid {
+      border-color: #eeb4b4;
+      background-color: rgba($color-danger, 0.02);
+    }
+    
+    &:disabled {
+      background-color: $color-background-dark;
+      cursor: not-allowed;
+      opacity: 0.7;
+    }
+  }
+  
+  &__select {
+    width: 11vw;
+    padding: $spacing-md;
+    font-size: $font-size-sm;
+    color: $color-text-primary;
+    background-color: $color-background-light;
+    border: 1px solid #d0d0d0;
+    border-radius: $border-radius-md;
+    appearance: none;
+    background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3e%3cpath stroke='%236b7280' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='M6 8l4 4 4-4'/%3e%3c/svg%3e");
+    background-position: right $spacing-md center;
+    background-repeat: no-repeat;
+    background-size: 1.25em;
+    transition: all $transition-normal;
+    
+    @include input-focus;
+
+    &.is-invalid {
+      border-color: #eeb4b4;
+      background-color: rgba($color-danger, 0.02);
+    }
+    
+    &:disabled {
+      background-color: $color-background-dark;
+      cursor: not-allowed;
+      opacity: 0.7;
+    }
+  }
+  
+  &__readonly {
+    width: 100%;
+    padding: $spacing-md;
+    font-size: $font-size-sm;
+    color: $color-text-primary;
+    background-color: $color-background-dark;
+    border: 1px solid $color-border;
+    border-radius: $border-radius-md;
+    
+    &.password {
+      letter-spacing: 0.25em;
+    }
+  }
+  
+  &__error {
+    @include flex(row, flex-start, center);
+    gap: $spacing-xs;
+    font-size: $font-size-xs;
+    color: $color-danger;
+    margin-top: $spacing-xs;
+    animation: slideIn 0.2s ease-out;
+    
+    .material-icons {
+      font-size: $font-size-sm;
+    }
+  }
+  
+  &__counter {
+    position: absolute;
+    right: 0;
+    bottom: -1.25rem;
+    font-size: $font-size-xs;
+    color: $color-text-tertiary;
+  }
+}
+
+// ========================================
+// STATUS FIELDS
+// ========================================
+
+.status-fields {
+  @include flex(column);
+  gap: $spacing-lg;
+}
+
+.status-field {
+  @include flex(row, space-between, center);
+  padding: $spacing-md 0;
+  border-bottom: 1px solid $color-border-light;
+  
+  &:last-child {
+    border-bottom: none;
+    padding-bottom: 0;
+  }
+  
+  &__label {
+    @include flex(row, flex-start, center);
+    gap: $spacing-sm;
+    font-size: $font-size-sm;
+    font-weight: 500;
+    color: $color-text-secondary;
+    
+    .material-icons {
+      font-size: $font-size-md;
+      color: $color-primary;
+    }
+  }
+  
+  &__value {
+    @include flex(row, flex-end, center);
+  }
+}
+
+// ========================================
+// STATUS BADGES
+// ========================================
+
+.status-badge {
+  @include flex(row, center, center);
+  gap: $spacing-xs;
+  padding: $spacing-xs $spacing-md;
+  font-size: $font-size-xs;
+  font-weight: 500;
+  border-radius: $border-radius-full;
+  background-color: $color-background-dark;
+  color: $color-text-secondary;
+  
+  .material-icons {
+    font-size: $font-size-sm;
+  }
+  
+  &--active {
+    background-color: rgba($color-success, 0.1);
+    color: $color-success;
+  }
+  
+  &--locked {
+    background-color: rgba($color-danger, 0.1);
+    color: $color-danger;
+  }
+  
+  &--unlocked {
+    background-color: rgba($color-success, 0.1);
+    color: $color-success;
+  }
+  
+  &--admin {
+    background-color: rgba($color-primary, 0.1);
+    color: $color-primary;
+  }
+  
+  &--user {
+    background-color: rgba($color-info, 0.1);
+    color: $color-info;
+  }
+
+  &--manager {
+    background-color: rgba($color-warning, 0.1);
+    color: $color-warning;
+  }
+
+  &--team-leader {
+    background-color: rgba($color-danger, 0.1);
+    color: $color-danger;
+  }
+
+}
+
+// ========================================
+// TOGGLE SWITCH
+// ========================================
+
+.toggle-switch {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  cursor: pointer;
+  
+  input {
+    opacity: 0;
+    width: 0;
+    height: 0;
+    
+    &:checked + .toggle-switch__slider {
+      background-color: $color-danger;
+      
+      &:before {
+        transform: translateX(18px);
+      }
+    }
+  }
+  
+  &__slider {
+    position: relative;
+    display: inline-block;
+    width: 40px;
+    height: 22px;
+    background-color: $color-success;
+    border-radius: $border-radius-full;
+    transition: background-color $transition-normal;
+    
+    &:before {
+      content: "";
+      position: absolute;
+      height: 18px;
+      width: 18px;
+      left: 2px;
+      bottom: 2px;
+      background-color: white;
+      border-radius: 50%;
+      transition: transform $transition-normal;
+    }
+  }
+  
+  &__label {
+    margin-left: $spacing-md;
+    font-size: $font-size-xs;
+    font-weight: 500;
+  }
+}
+
+// ========================================
+// BUTTONS
+// ========================================
+
+.btn {
+  @include flex(row, center, center);
+  gap: $spacing-sm;
+  padding: $spacing-sm $spacing-lg;
+  font-size: $font-size-sm;
+  font-weight: 500;
+  border-radius: $border-radius-md;
+  border: none;
+  cursor: pointer;
+  transition: all $transition-normal;
+  
+  .material-icons {
+    font-size: $font-size-md;
+  }
+  
+  &:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+  }
+  
+  &:focus {
+    outline: none;
+  }
+  
+  &-primary {
+    background-color: $color-primary;
+    color: white;
+    
+    &:hover:not(:disabled) {
+      background-color: $color-primary-dark;
+    }
+    
+    &:focus {
+      box-shadow: 0 0 0 3px rgba($color-primary, 0.3);
+    }
+  }
+  
+  &-secondary {
+    background-color: $color-background-dark;
+    color: $color-text-secondary;
+    
+    &:hover:not(:disabled) {
+      background-color: darken($color-background-dark, 5%);
+    }
+    
+    &:focus {
+      box-shadow: 0 0 0 3px rgba($color-secondary, 0.2);
+    }
+  }
+}
+
+// ========================================
+// TOAST NOTIFICATIONS
+// ========================================
+
+.toast {
+  position: fixed;
+  bottom: $spacing-lg;
+  right: $spacing-lg;
+  @include flex(row, flex-start, center);
+  gap: $spacing-sm;
+  padding: $spacing-md $spacing-lg;
+  border-radius: $border-radius-md;
+  box-shadow: $shadow-lg;
+  z-index: 1000;
+  animation: toastIn 0.3s ease-out, toastOut 0.3s ease-in 2.7s forwards;
+  
+  &--error {
+    background-color: $color-danger;
+    color: white;
+  }
+  
+  &--success {
+    background-color: $color-success;
+    color: white;
+  }
+  
+  .material-icons {
+    font-size: $font-size-md;
+  }
+}
+
+// ========================================
+// ANIMATIONS
+// ========================================
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY($spacing-md); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes slideIn {
+  from { opacity: 0; transform: translateX(-$spacing-sm); }
+  to { opacity: 1; transform: translateX(0); }
+}
+
+@keyframes toastIn {
+  from { opacity: 0; transform: translateY($spacing-lg); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes toastOut {
+  from { opacity: 1; transform: translateY(0); }
+  to { opacity: 0; transform: translateY($spacing-lg); }
+}
+
+// ========================================
+// CUSTOM SNACKBAR STYLES
+// ========================================
+
+::ng-deep {
+  .success-snackbar {
+    background-color: $color-success !important;
+    color: white !important;
+    
+    .mat-simple-snackbar-action {
+      color: white !important;
+    }
+  }
+  
+  .error-snackbar {
+    background-color: $color-danger !important;
+    color: white !important;
+    
+    .mat-simple-snackbar-action {
+      color: white !important;
+    }
+  }
+  
+  .confirmation-dialog {
+    .mat-dialog-container {
+      border-radius: $border-radius-lg;
+      padding: $spacing-xl;
+    }
+  }
+}
+
+.form-error-message {
+  color: $color-danger;
+  font-size: $font-size-xs;
+  margin-top: -2.5em;
+  animation: slideIn 0.2s ease-out;
+  display: flex;
+  align-items: center;
+  margin-bottom: 3em;
+
+  .material-icons {
+    font-size: $font-size-sm;
+    vertical-align: middle;
+  }
+}
+
+
+.form-field__select option img {
+  vertical-align: middle;
+  margin-right: 8px;
+}

@@ -1,0 +1,156 @@
+<div class="dashboard-container">
+  <div class="dashboard-header">
+    <h1>Multi Diagnostic Platform</h1>
+    <p class="subtitle">Vehicle Engineering & Diagnostic Dashboard</p>
+  </div>
+
+  <!-- Summary KPIs -->
+  <div class="card-grid summary-grid">
+    <div class="dashboard-card kpi-card" *ngFor="let kpi of summaryKpis">
+      <div class="kpi-icon">
+        <i class="material-icons">{{ kpi.icon }}</i>
+      </div>
+      <div class="kpi-content">
+        <div class="kpi-title">{{ kpi.title }}</div>
+        <div class="kpi-value">{{ kpi.value }}</div>
+        <div
+          class="kpi-trend"
+          [ngClass]="{ 'trend-up': kpi.trendUp, 'trend-down': !kpi.trendUp }"
+        >
+          <i class="material-icons">{{
+            kpi.trendUp ? "trending_up" : "trending_down"
+          }}</i>
+          {{ kpi.trend }}
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Diagnostic Metrics -->
+  <div class="dashboard-card">
+    <div class="card-header">
+      <h2>Diagnostic Metrics</h2>
+    </div>
+    <div class="card-content">
+      <div class="metric-item" *ngFor="let metric of diagnosticMetrics">
+        <div class="metric-header">
+          <div class="metric-title">{{ metric.title }}</div>
+          <div class="metric-value">
+            {{ metric.value }} / {{ metric.maxValue }}
+          </div>
+        </div>
+        <div class="progress-bar">
+          <div class="progress-fill" [style.width.%]="metric.percentage"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Performance Indicators -->
+  <div class="dashboard-card">
+    <div class="card-header">
+      <h2>Performance Indicators</h2>
+    </div>
+    <div class="card-content">
+      <div class="performance-grid">
+        <div class="performance-item" *ngFor="let item of performanceData">
+          <div class="performance-label">{{ item.label }}</div>
+          <div class="performance-value">{{ item.value }}</div>
+          <div
+            class="performance-status"
+            [ngClass]="getPerformanceClass(item.status)"
+          >
+            <i class="material-icons">
+              {{
+                item.status === "excellent"
+                  ? "stars"
+                  : item.status === "good"
+                  ? "check_circle"
+                  : item.status === "warning"
+                  ? "warning"
+                  : "error"
+              }}
+            </i>
+            {{ item.status }}
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- System Health -->
+  <div class="dashboard-card">
+    <div class="card-header">
+      <h2>System Health</h2>
+    </div>
+    <div class="card-content">
+      <div class="health-item" *ngFor="let system of systemHealth">
+        <div class="health-info">
+          <div class="health-status">
+            <span
+              class="status-indicator"
+              [ngClass]="getStatusClass(system.status)"
+            ></span>
+            <span class="health-name">{{ system.name }}</span>
+          </div>
+          <div class="health-metrics">
+            <div class="health-uptime">{{ system.uptime }}</div>
+            <div class="health-incident">
+              Last incident: {{ system.lastIncident }}
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Vehicle Models -->
+  <div class="dashboard-card">
+    <div class="card-header">
+      <h2>Vehicle Models</h2>
+    </div>
+    <div class="card-content">
+      <div class="vehicle-list">
+        <div class="vehicle-item" *ngFor="let vehicle of vehicleModels">
+          <div class="vehicle-info">
+            <div class="vehicle-model">
+              {{ vehicle.make }} {{ vehicle.model }} ({{ vehicle.year }})
+            </div>
+            <div class="vehicle-diagnostics">
+              {{ vehicle.diagnosticCount }} diagnostics
+            </div>
+          </div>
+          <div
+            class="vehicle-status"
+            [ngClass]="getVehicleStatusClass(vehicle.status)"
+          >
+            {{ vehicle.status }}
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Recent Activities -->
+  <div class="dashboard-card">
+    <div class="card-header">
+      <h2>Recent Activities</h2>
+    </div>
+    <div class="card-content">
+      <div class="activity-list">
+        <div class="activity-item" *ngFor="let activity of recentActivities">
+          <div class="activity-time">{{ activity.time }}</div>
+          <div class="activity-content">
+            <div
+              class="activity-action"
+              [ngClass]="getSeverityClass(activity.severity)"
+            >
+              {{ activity.action }}
+            </div>
+            <div class="activity-description">{{ activity.description }}</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

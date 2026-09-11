@@ -1,0 +1,425 @@
+{
+  "global": {
+    "swversion": "[v1.3.1]",
+    "home": "Accueil",
+    "user": {
+      "profile": "Profil",
+      "password": "Mot de passe",
+      "logout": "Déconnexion",
+      "authority": {
+        "ROLE_USER": "Utilisateur",
+        "ROLE_ADMIN": "Administrateur"
+      },
+      "lang": {
+        "fr": "Français",
+        "en": "Anglais"
+      }
+    },
+    "products": "Produits",
+    "statistics": "Statistiques",
+    "management": "Administration",
+    "users": "Utilisateurs",
+    "groups": "Groupes",
+    "info": "Informations",
+    "versions": "Versions",
+    "updates": "Mises à jour",
+    "status": "Statut",
+    "delete": "Supprimer",
+    "created": {
+      "date": "Date de création",
+      "by": "Créée par"
+    },
+    "name": "Nom",
+    "comment": "Commentaire",
+    "type": "Type",
+    "code": "Code",
+    "creation_date": "Date de création",
+    "lang": "Langue",
+    "title": "Titre",
+    "description": "Description",
+    "characters": "caractères"
+  },
+  "button": {
+    "edit": "MODIFIER",
+    "save": "SAUVER",
+    "cancel": "ANNULER",
+    "new": "NOUVEAU",
+    "add": "AJOUTER",
+    "delete": "SUPPRIMER",
+    "refresh": "RAFRAICHIR",
+    "create": "CREER",
+    "create.group": "CREER UN GROUPE",
+    "update": "METTRE À JOUR",
+    "previous": "PRECEDENT",
+    "next": "SUIVANT",
+    "proceed": "POURSUIVRE",
+    "suspend": "SUSPENDRE",
+    "yes": "OUI",
+    "no": "NON",
+    "renew-activation": "Renouveller l'email d'activation",
+    "create-update": "Créer une mise à jour"
+  },
+  "login": {
+    "error": {
+      "incorrect": "Nom d'utilisateur ou mot de passe incorrect",
+      "forbidden": "Veuillez vous connecter pour continuer",
+      "account": {
+        "locked": "Votre compte a été vérouillé. Veuillez contacter un administrateur",
+        "activated": "Votre compte n'est pas activé. Veuillez cliquer sur le lien dans l'email d'activation"
+      }
+    },
+    "username": "Nom d'utilisateur",
+    "password": {
+      "label": "Mot de passe",
+      "forgot": "Mot de passe oublié?"
+    },
+    "rememberme": "Se souvenir de moi",
+    "login": "Connexion",
+    "logout": "Déconnexion",
+    "title": "Identification"
+  },
+  "activate": {
+    "title": "Activation",
+    "messages": {
+      "success": "Votre compte utilisateur a bien été activé.",
+      "error": "Votre compte utilisateur n'a pas pu être activé."
+    },
+    "login": "Se connecter"
+  },
+  "password": {
+    "choose": "Veuillez choisir un nouveau mot de passe",
+    "reset": "Réinitialiser mot de passe",
+    "message": {
+      "newpassword": {
+        "title": "Nouveau mot de passe",
+        "placeholder": "Nouveau mot de passe",
+        "required": "Mot de passe requis.",
+        "minlength": "Le mot de passe doit faire plus de 4 caractères.",
+        "maxlength": "Le mot de passe doit faire moins de 50 caractères."
+      },
+      "confirmpassword": {
+        "title": "Confirmation de mot de passe",
+        "placeholder": "Confirmation de mot de passe",
+        "required": "Mot de passe de confirmation requis.",
+        "minlength": "Le mot de passe de confirmation doit faire plus de 4 caractères.",
+        "maxlength": "Le mot de passe de confirmation doit faire moins de 50 caractères."
+      },
+      "resetpassword": {
+        "title": "Veuillez renseigner l'adresse e-mail utilisée pour vous enregistrer"
+      },
+      "success": {
+        "init": "Votre mot de passe a bien été réinitialisé.",
+        "change": "Le mot de passe a été modifié!",
+        "email.sent": "Veuillez vérifier vos nouveaux e-mails et suivre les instructions pour réinitialiser votre mot de passe."
+      },
+      "error": {
+        "init": "Votre mot de passe n'a pas pu être réinitialisé. Une requête de mot de passe n'est valide que pour 24 heures.",
+        "change": "Votre mot de passe n'a pas pu être modifié",
+        "dontmatch": "Les mots de passe ne correspondent pas!"
+      }
+    }
+  },
+  "product": {
+    "info": "Informations du produit",
+    "name": "Nom du produit",
+    "code": "Code du produit",
+    "comment": "Commentaire du produit",
+    "profiles": "Profils du produit",
+    "icon": "Icone",
+    "rights": "Droits sur ce produit",
+    "edit": "Editer",
+    "delete": "Supprimer",
+    "please.select": "Veuillez sélectionner un produit",
+    "help": {
+      "create": "A la fin de la création du produit, vous allez être redigiré vers la page de gestion des groupes afin de l'ajouter dans un de ces derniers",
+      "profiles": "La liste des profiles du produit, séparés par des virgules"
+    },
+    "tab": {
+      "info": "Info",
+      "versions": "Versions",
+      "updates": "Mises à jour"
+    }
+  },
+  "version": {
+    "info": "Informations de la version",
+    "name": "Nom de version",
+    "comment": "Commentaire de version",
+    "latest": "Dernières versions",
+    "description": "Description",
+    "code": "Code",
+    "date": "Date de création",
+    "please.select": "Veuillez sélectionner une version",
+    "update": {
+      "associated": "Mises à jour associées",
+      "from": "A partir de cette version",
+      "to": "Vers cette version"
+    },
+    "graph": "Graphique des versions"
+  },
+  "update": {
+    "info": "Informations de la mise à jour",
+    "name": "Nom de mise à jour",
+    "comment": "Commentaire de mise à jour",
+    "type": "Type de mise à jour",
+    "blocking": "Mise à jour bloquante",
+    "major": "Mise à jour majeure",
+    "status": {
+      "label": "Statut de la mise à jour",
+      "error": "Erreur",
+      "pending": "En attente",
+      "unpublished": "Non publiée",
+      "in_test": "En test",
+      "field_test": "Field test",
+      "published": "Publiée",
+      "suspended": "Suspendue",
+      "next": {
+        "in_test": "PASSER EN TEST",
+        "field_test": "PASSER EN FIELD TEST",
+        "published": "PUBLIER",
+        "suspended": "SUSPENDRE"
+      }
+    },
+    "help": {
+      "name": "Le nom de la mise à jour",
+      "comment": "Le commentaire de la mise à jour",
+      "type": "Le type de la mise à jour",
+      "status": "Le statut de la mise à jour",
+      "pending": "Le fichier mise à jour est en cours de traitement, veuillez patienter",
+      "noupdate": "En attente de téléversement d'un fichier"
+    },
+    "code": "Code de la mise à jour",
+    "files": "Fichiers de la mise à jour",
+    "descriptions": "Descriptions",
+    "latest": "Dernières mises à jour",
+    "latest.published": "Dernières mises à jour publiées",
+    "date": "Date de création",
+    "please.select": "Veuillez sélectionner une mise à jour",
+    "applied_versions": "Versions applicables",
+    "linked_version": "Version cible",
+    "create": {
+      "title": {
+        "main": "Création de mise à jour",
+        "product": "Sélectionner un produit",
+        "version": "Choisir les versions",
+        "update": "Définir la mise à jour",
+        "summary": "Récapitulation"
+      },
+      "help": {
+        "step1": "Sélectionner le produit qui sera associé à la mise à jour",
+        "step2": {
+          "applied_versions": "Sélectionner les versions à partir des quelles la mise à jour sera disponible",
+          "applied_versions.placeholder": "Les versions applicables seront affichées ici",
+          "applied_versions.select": "Veuillez sélectionner une ou plusieurs versions appliquée(s)",
+          "major_update": "Ou cocher pour appliquer toutes les versions (mise à jour majeure)",
+          "linked_version": "Sélectionner une version cible",
+          "linked_version.placeholder": "La version cible sera affichée ici",
+          "linked_version.select": "Veuillez sélectionner une version cible",
+          "button_create": "CREER UNE NOUVELLE VERSION"
+        },
+        "step3": "Définir les propriétés de la mise à jour",
+        "step3.form.invalid": "Veuillez remplir le formulaire de propriétés de mise à jour",
+        "step4": "Résumé de la mise à jour"
+      },
+      "tooltip": {
+        "next1": "Aller à la sélection de versions",
+        "prev2": "Revenir à la sélection du produit",
+        "next2": "Aller à la définition de la mise à jour",
+        "prev3": "Revenir à la sélection de versions",
+        "next3": "Aller à la récapitulation",
+        "prev4": "Revenir à la définition de la mise à jour",
+        "next4": "Sauver la mise à jour et procéder au téléversement de son fichier associé",
+        "cancel": "Annuler la création de la mise à jour",
+        "linked_version": "La version souhaitée n'est pas créée?"
+      },
+      "summary": {
+        "productLine": "Vous êtes sur le point de créer une mise à jour sur le produit",
+        "nameLine": "Cette mise à jour se nommera",
+        "linkedVersionLine": "Elle aura comme version cible",
+        "appliedVersionsLine": "Et sera applicable sur les versions",
+        "descriptionLine": "Les descriptions définies sont",
+        "statusLine": "Son statut restera EN ATTENTE jusqu'a la fin du téléversement de son fichier associé"
+      }
+    }
+  },
+  "upload": {
+    "title": "Téléversement de fichier",
+    "help": {
+      "new.upload": "Vous allez téléverser un nouveau fichier pour la mise à jour {{updateName}}",
+      "update.upload": "Vous êtes sur le point de remplacer le fichier {{updateFileName}} de la mise à jour {{updateName}}"
+    },
+    "file": "Téléverser un fichier",
+    "file.edit": "Modifier le fichier de mise à jour",
+    "file.delete": "Supprimer le fichier de mise à jour",
+    "file.new": "Téléverser un nouveau fichier",
+    "file.profiles": "Profils",
+    "file.name": "Nom du fichier",
+    "hash": {
+      "please.write": "Veuillez saisir le hash de la mise à jour",
+      "please.select": "Ou choisir un fichier contenant ce hash",
+      "type.please.select": "Veuillez sélectionner le type de hash"
+    },
+    "please.select": "Veuillez choisir un fichier de mise à jour",
+    "uncompressedsize.write": "Veuillez saisir la taille de la mise à jour en octets une fois décompressée (optionnel)",
+    "profiles.please.select": "Veuillez choisir au moins un profil",
+    "file.select.hash": "Sélectionner un fichier de hash",
+    "file.select": "Sélectionner une mise à jour",
+    "progress": "Progression du téléversement",
+    "file.size": "Taille du fichier: ",
+    "size": "taille",
+    "uncompressed": "décompressé",
+    "checksum": "checksum",
+    "checksumtype": "type checksum",
+    "remaining.time": "Temps restant: ",
+    "speed": "Vitesse: ",
+    "goto.product": "Retourner au produit",
+    "status": {
+      "added": "Ajouté",
+      "paused": "En pause",
+      "cancelled": "Annulé",
+      "uploading": "Téléversement",
+      "checksum.server": "Vérification du checksum",
+      "complete": "Terminé",
+      "error": "Erreur"
+    },
+    "pending": "le fichier de mise à jour est en cours de traitement, veuillez patienter."
+  },
+  "group": {
+    "name": "Nom du groupe",
+    "comment": "Commentaire du groupe",
+    "rights": "Droits",
+    "add.products": "Ajouter des produits",
+    "add.users": "Ajouter des utilisateurs",
+    "please.select": "Veuillez sélectionner un groupe"
+  },
+  "user": {
+    "name": "Nom d'utilisateur",
+    "login": "Identifiant",
+    "email": "Email",
+    "your_email": "Votre email",
+    "first_name": "Prénom",
+    "your_first_name": "Votre prénom",
+    "last_name": "Nom",
+    "your_last_name": "Votre nom",
+    "activated": "Activé",
+    "locked": "Vérouillé",
+    "authorities": "Rôle",
+    "add.group": "Ajouter des groupes",
+    "please.select": "Veuillez sélectionner un utilisateur",
+    "message": {
+      "first_name.required": "Votre prénom est requis",
+      "last_name.required": "Votre nom est requis",
+      "email.required": "Votre email est requis",
+      "lang.required": "La lanque est requise",
+      "success": {
+        "profile.saved": "Votre profil a été sauvegardé!"
+      },
+      "error": {
+        "profile.saved": "Une erreur est survenue lors de la sauvegarde du profil!"
+      }
+    }
+  },
+  "lang": {
+    "add": "Ajouter une langue"
+  },
+  "statistic": {
+    "tab": {
+      "state": "Etat du parc",
+      "requests": "Requêtes"
+    },
+    "graph": {
+      "request": {
+        "dateAxis": "Date",
+        "requestAxis": "Nombre de requêtes"
+      }
+    },
+    "filter": {
+      "atDate": "Filtrer par date",
+      "rangeDate": "Date de début et de fin",
+      "os": "Filtrer par OS",
+      "arch": "Filtrer par architecture",
+      "lang": "Filtrer par langue",
+      "version": "Filtrer par version",
+      "status": "Filtrer par statut",
+      "state": "Filtrer par état"
+    },
+    "help": {
+      "atDate": "Le graphique représentera les données à cette date. Aujourd'hui par défaut",
+      "rangeDate": "Le graphique représentera les données entre la date de début et la date de fin (exclue)",
+      "os": "Le graphique sera filtré par OS",
+      "arch": "Le graphique sera filtré par architecture",
+      "lang": "Le graphique sera filtré par langue",
+      "version": "Le graphique sera filtré par version",
+      "status": "Le graphique sera filtré par statut",
+      "state": "Le graphique sera filtré par état"
+    },
+    "export": "Exporter en XLSX"
+  },
+  "modal": {
+    "select.item": "Sélection",
+    "create.group": "Création d'un groupe",
+    "confirm": "Confirmer",
+    "delete.confirm": "Êtes-vous sûr de vouloir supprimer {{value}} ?",
+    "cancel.update.creation": "Êtes-vous sûr de vouloir annuler la création de la mise à jour ?",
+    "update.state.confirm": "Êtes-vous sûr de vouloir mettre à jour le statut vers {{value}} ?",
+    "update.state.suspend": "Êtes-vous sûr de vouloir suspendre cette mise à jour?",
+    "upload.check": "Êtes-vous sûr de vouloir téléverser un autre fichier pour cette mise à jour ?",
+    "upload.cancel": "Êtes-vous sûr de vouloir annuler le téléversement du fichier {{value}} ?",
+    "upload.delete": "Êtes-vous sûr de vouloir supprimer le fichier de mise à jour '{{value}}'"
+  },
+  "table": {
+    "filter": "Filtrer par: {{columns}}",
+    "filter.all": "Filtrer"
+  },
+  "warning": {
+    "upload": {
+      "update": {
+        "present": "Un fichier est déjà associé à cette mise à jour. Il sera supprimé et remplacé si un téléversement est effectué.",
+        "status.published": "La mise à jour est <strong>PUBLIÉE</strong>. <strong>SON STATUT PASSERA A NON PUBLIÉ SI UN TÉLÉVERSEMENT EST EFFECTUÉ</strong>"
+      }
+    },
+    "update.file.no.default": "Aucun fichier n'a le profil 'DEFAULT'"
+  },
+  "error": {
+    "user.login.used": "Login déjà pris",
+    "user.email.used": "Email déjà pris",
+    "user.notfound": "Utilisateur non trouvé",
+    "group.name.empty": "Le nom du groupe ne doit pas être vide",
+    "renew.user.activated": "L'utilisateur est déjà activé",
+    "version.update.exist": "La version est liée à la mise à jour {{value}}. Supprimez en premier cette dernière",
+    "image.large": "La taille de l'image est trop importante. Veuillez sélectionner une image avec une taille inférieure à 64kb",
+    "linked_version.already_used": "La version cible est déjà utilisée sur la mise a jour {{value}}",
+    "applied_version.same": "La version cible est présente dans la liste des versions applicables ({{value}})",
+    "profile.already_used": "Le profil {{profile}} assigé au fichier '{{fromUpdateFile}}' est déjà utilisé pour un autre fichier '{{toUpdateFile}}'",
+    "upload": "Une erreur est survenue après le téléversement, veuillez réessayer. Si le problème persiste, contactez votre administrateur",
+    "upload.checksum": "La vérification du checksum a échouée. Veuillez réessayer de téléverser le fichier.<br/>Si le problème persiste, contactez votre administrateur",
+    "upload.checksum.file.size": "La taille du fichier contenant le checksum est trop importante (>1ko)"
+  },
+  "success": {
+    "user": {
+      "created": "Utilisateur créé",
+      "updated": "Utilisateur mis à jour",
+      "deleted": "Utilisateur supprimé"
+    },
+    "group": {
+      "created": "Groupe créé",
+      "updated": "Groupe mis à jour",
+      "deleted": "Groupe supprimé"
+    },
+    "product": {
+      "updated": "Produit mis à jour",
+      "created": "Produit créé. Veuillez penser à l'ajouter à au moins un groupe d'utilisation"
+    },
+    "version": {
+      "created": "Version créée",
+      "updated": "Version mise à jour",
+      "deleted": "Version supprimée"
+    },
+    "update": {
+      "created": "Mise à jour créée",
+      "updated": "Mise à jour mise à jour",
+      "deleted": "Mise à jour supprimée",
+      "file.deleted": "Fichier de mise à jour supprimé"
+    },
+    "upload": "Le téléversement est maintenant terminé.<br/>Le status de la mise à jour passera à 'Non publiée' après la fin du traitement du fichier."
+  }
+}

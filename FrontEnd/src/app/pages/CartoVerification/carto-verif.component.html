@@ -1,0 +1,179 @@
+<div class="container">
+  <!-- Left side: Carto list -->
+  <div class="carto-list">
+    <div>
+      <h2>Pending Cartographies</h2>
+      <!-- <div class="date-filter">
+        <label for="dateFilter">Sort by Date:</label>
+        <button id="dateFilter" (click)="onSortChange()" class="date-sort-button">Date
+          <mat-icon *ngIf="selectedDateFilter === 'asc'">arrow_upward</mat-icon>
+          <mat-icon *ngIf="selectedDateFilter === 'desc'">arrow_downward</mat-icon>
+        </button>
+      </div> -->
+    </div>
+
+    <!-- <div *ngIf="loading" class="spinner-container">
+      <mat-spinner style="color: #4caf50; font-size: 10px;"></mat-spinner>
+    </div> -->
+
+    <div *ngIf="error" class="error-message">
+      {{ error }}
+    </div>
+
+    <div *ngIf="!loading && !error && pendingCartos.length === 0" class="empty-state">
+      No pending cartos to review.
+    </div>
+
+    <div *ngIf="!loading && !error && pendingCartos.length > 0" class="carto-items">
+      <mat-card *ngFor="let carto of pendingCartos" class="carto-item" [class.selected]="selectedCarto?.id === carto.id"
+        (click)="selectCarto(carto)">
+        <div class="carto-info">
+          <span class="carto-icon">
+            <mat-icon style="color: #4caf50; margin-right: -8px;margin-top: 10px;">map</mat-icon>
+          </span>
+          <span class="carto-name">Carto-{{ carto.name || "Unnamed Carto" }}</span>
+
+          <div class="carto-actions">
+            <button class="approve-button" (click)="handleApprove(carto.id)">
+              <mat-icon>check_circle</mat-icon> Approve
+            </button>
+            <button class="reject-button" (click)="handleReject(carto.id)">
+              <mat-icon>cancel</mat-icon> Reject
+            </button>
+          </div>
+        </div>
+      </mat-card>
+    </div>
+  </div>
+
+  <!-- Right side: Carto details -->
+  <div class="carto-details">
+    <h2>Informations</h2>
+
+    <div *ngIf="!selectedCarto" class="empty-details">
+      Select a carto to view details
+    </div>
+
+    <div *ngIf="detailsError" class="error-message">
+      {{ detailsError }}
+    </div>
+
+    <mat-card *ngIf="selectedCarto && !loadingDetails && !detailsError" class="details-card">
+      <!-- <mat-card-header>
+        <mat-card-title>
+          <mat-icon
+            style="color: #4caf50; margin-right: -8px; vertical-align: middle"
+            >description</mat-icon
+          >
+          Carto-{{ selectedCarto.name || "Unnamed Carto" }}
+        </mat-card-title>
+      </mat-card-header> -->
+
+      <mat-card-content>
+        <div class="details-section">
+          <!-- <h3>Cartography Information</h3> -->
+          <table class="details-table main-table">
+            <tbody>
+              <tr>
+                <th>Name</th>
+                <td>Carto-{{ selectedCarto.name || "Unnamed Carto" }}</td>
+              </tr>
+              <tr>
+                <th>Tool</th>
+                <td>{{ selectedCarto.outil || "Unknown" }}</td>
+              </tr>
+              <tr>
+                <th>Version</th>
+                <td>{{ selectedCarto.version || "N/A" }}</td>
+              </tr>
+              <tr>
+                <th>Created Date</th>
+                <td>{{ selectedCarto.creationDate | date : "medium" }}</td>
+              </tr>
+              <tr>
+                <th>Status</th>
+                <td>
+                  <span style="
+                      display: inline-block;
+                      padding: 4px 10px;
+                      border-radius: 12px;
+                      background-color: #fff9c4;
+                      color: #fbc02d;
+                      font-weight: 500;
+                    ">
+                    {{ selectedCarto.status || "Unknown" }}
+                  </span>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+
+          <h4 *ngIf="selectedCarto.families.length > 0">Details:</h4>
+
+          <div *ngFor="let family of selectedCarto.families; let i = index" style="margin-bottom: 20px">
+            <div style="
+                background-color: #ffffff;
+                padding: 10px 16px;
+                border-radius: 8px;
+                margin-bottom: 10px;
+                display: flex;
+                align-items: center;
+                box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+              ">
+              <mat-icon style="color: #4caf50; margin-right: 8px">storage</mat-icon>
+              <span style="font-weight: 600; font-size: 1.1rem; color: #2e7d32;">{{ family.name }}</span>
+            </div>
+
+            <table class="details-table nested-table">
+              <thead>
+                <tr>
+                  <th style="width: 30%"></th>
+                  <th style="width: 70%"></th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr *ngFor="let ecu of family.ecus">
+                  <th>{{ ecu.name }}</th>
+                  <td>
+                    <ul>
+                      <li>
+                        <strong>Perimeter:</strong> {{ ecu.perimetre || "N/A" }}
+                      </li>
+                      <li><strong>Reco:</strong> {{ ecu.reco || "N/A" }}</li>
+                      <li><strong>MPM:</strong> {{ ecu.mpm || "N/A" }}</li>
+                      <li>
+                        <strong>Ident:</strong>
+                        {{ ecu.ident || "N/A" }}
+                      </li>
+                      <li><strong>TA:</strong> {{ ecu.ta || "N/A" }}</li>
+                      <li><strong>FA:</strong> {{ ecu.fa || "N/A" }}</li>
+                      <li>
+                        <strong>Protocol:</strong> {{ ecu.protocol || "N/A" }}
+                      </li>
+                      <li>
+                        <strong>Address:</strong> {{ ecu.address || "N/A" }}
+                      </li>
+                      <li><strong>SA:</strong> {{ ecu.sa || "N/A" }}</li>
+                      <li>
+                        <strong>Responsible Developer:</strong>
+                        {{ ecu.respDev || "N/A" }}
+                      </li>
+                      <li>
+                        <strong>Development State:</strong>
+                        {{ ecu.etatDev || "N/A" }}
+                      </li>
+                      <li>
+                        <strong>Objective Pack:</strong>
+                        {{ ecu.objectifCible || "N/A" }}
+                      </li>
+                    </ul>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </mat-card-content>
+    </mat-card>
+  </div>
+</div>

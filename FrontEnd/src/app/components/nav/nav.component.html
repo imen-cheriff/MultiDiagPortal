@@ -1,0 +1,126 @@
+<div class="d-flex flex-column" *ngIf="isAuthenticated">
+  <nav class="navbar navbar-expand-lg navbar-light bg-light container-fluid">
+    <a class="navbar-brand">
+      <div class="navbar-brand-logo">
+        <img src="../../../assets/actia.svg" />
+      </div>
+    </a>
+
+    <button
+      type="button"
+      class="navbar-toggler collapsed"
+      aria-expanded="false"
+    >
+      <i class="fa fa-list-ul"></i>
+    </button>
+
+    <div class="collapse navbar-collapse align-items-stretch">
+      <ul class="navbar-nav mr-auto"></ul>
+
+      <ul class="navbar-nav">
+        <li class="nav-item" *ngIf="isAuthenticated">
+          <a class="nav-link d-flex align-items-center" href="home">
+            <i class="fa fa-home"></i>
+            <span class="hidden-md hidden-sm" [routerLink]="['/home']"
+              ><span>&nbsp;</span>Home</span
+            >
+          </a>
+        </li>
+
+        <li class="nav-item" *ngIf="isAuthenticated">
+          <a class="nav-link d-flex align-items-center" href="groupworkspace">
+            <i class="fa fa-table"></i
+            ><span class="caret">
+              <span [routerLink]="['/groupworkspace']"
+                ><span>&nbsp;</span>Cartogrphies</span
+              ></span
+            >
+          </a>
+        </li>
+
+        <li class="nav-item" *ngIf="isAuthenticated && (isManager || isTL)">
+          <a class="nav-link d-flex align-items-center" href="verify-cartos">
+            <i class="fa fa-check-circle"></i
+            ><span class="caret">
+              <span [routerLink]="['/verify-cartos']"
+                ><span>&nbsp;</span>Validation</span
+              ></span
+            >
+            <span *ngIf="pendingCount > 0">
+              <span
+                class="badge badge-pill badge-danger"
+                style="
+                  background-color: #326f3d;
+                  margin-left: 8px;
+                  font-size: 11px;
+                "
+                >{{ pendingCount }}</span
+              >
+            </span>
+          </a>
+        </li>
+
+        <li
+          class="nav-item"
+          *ngIf="
+            (isAuthenticated && isManager) ||
+            (isAuthenticated && isTL) ||
+            (isAuthenticated && isAdmin)
+          "
+        >
+          <a class="nav-link d-flex align-items-center" href="plan">
+            <i class="fa fa-bar-chart"></i>
+            <span class="hidden-md hidden-sm" [routerLink]="['/plan']"
+              ><span>&nbsp;</span>Planification</span
+            >
+          </a>
+        </li>
+
+        <li class="nav-item" *ngIf="isAdmin || isManager">
+          <a class="nav-link d-flex align-items-center" href="history">
+            <span class="material-icons">history</span>
+            <span>&nbsp;</span>Historique<span class="caret"></span>
+          </a>
+        </li>
+
+        <li class="nav-item" *ngIf="isAdmin">
+          <a class="nav-link d-flex align-items-center" href="users">
+            <span class="material-icons">manage_accounts</span>
+            <span>&nbsp;</span> Management<span class="caret"></span>
+          </a>
+        </li>
+
+        <li class="nav-item dropdown" *ngIf="isAuthenticated">
+          <a
+            class="nav-link d-flex align-items-center dropdown-toggle"
+            data-toggle="dropdown"
+          >
+            <i class="fa fa-user"></i>
+            <span *ngIf="!isAdmin" class="caret"
+              ><span>&nbsp;</span>{{ fullName }}</span
+            >
+            <span *ngIf="isAdmin" class="caret"
+              ><span>&nbsp;</span>{{ firstName }}</span
+            >
+          </a>
+          <ul class="dropdown-menu dropdown-menu-right" role="menu">
+            <li role="menuitem">
+              <a class="dropdown-item" [routerLink]="['/profile']">
+                <i class="fa fa-wrench"></i> Profile
+              </a>
+            </li>
+            <li role="menuitem">
+              <a
+                class="dropdown-item"
+                [routerLink]="['/login']"
+                (click)="logout()"
+              >
+                <i class="fa fa-sign-out"></i> Logout
+              </a>
+            </li>
+          </ul>
+        </li>
+      </ul>
+    </div>
+  </nav>
+</div>

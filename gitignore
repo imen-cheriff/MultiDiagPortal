@@ -1,0 +1,68 @@
+# See https://docs.github.com/get-started/getting-started-with-git/ignoring-files for more about ignoring files.
+
+### Secrets — never commit real credentials ###
+**/application.properties
+**/anthropic.properties
+**/*.env
+.env
+.env.*
+
+### Frontend (Angular) ###
+dist/
+tmp/
+out-tsc/
+bazel-out/
+node_modules/
+npm-debug.log
+yarn-error.log
+.angular/cache/
+.sass-cache/
+connect.lock
+coverage/
+libpeerconnection.log
+testem.log
+typings/
+
+### Backend (Spring Boot / Maven) ###
+HELP.md
+target/
+!.mvn/wrapper/maven-wrapper.jar
+!**/src/main/**/target/
+!**/src/test/**/target/
+
+### IDEs and editors ###
+.idea/
+*.iws
+*.iml
+*.ipr
+.project
+.classpath
+.factorypath
+.settings/
+.springBeans
+.sts4-cache
+.apt_generated
+.c9/
+*.launch
+*.sublime-workspace
+
+### VS Code ###
+.vscode/*
+!.vscode/settings.json
+!.vscode/tasks.json
+!.vscode/launch.json
+!.vscode/extensions.json
+.history/*
+
+### NetBeans ###
+/nbproject/private/
+/nbbuild/
+/nbdist/
+/.nb-gradle/
+build/
+!**/src/main/**/build/
+!**/src/test/**/build/
+
+### System files ###
+.DS_Store
+Thumbs.db

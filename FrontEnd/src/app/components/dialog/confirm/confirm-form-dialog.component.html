@@ -1,0 +1,14 @@
+<div class="alert-box">
+  <div class="modal-header">
+    <h2 mat-dialog-title>{{ data.title }}</h2>
+  </div>
+    
+    <div class="modal-body">
+      <p>{{ data.message }}</p>
+    </div>
+    
+    <div class="modal-footer">
+      <button type="button"  class="btn-cancel" style="width: 60px;height: 35px;" (click)="onCancel()">{{ data.cancelText || 'Cancel' }}</button>
+      <button type="button" class="btn-confirm" style="width: 60px;height: 35px;"  (click)="onConfirm()">{{ data.confirmText || 'Confirm' }}</button>
+    </div>
+  </div>

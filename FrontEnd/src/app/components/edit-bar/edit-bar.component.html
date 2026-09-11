@@ -1,0 +1,68 @@
+<div class="edit-bar">
+  <!-- Left side: Title or info (can be added if needed) -->
+  <div class="edit-bar-left">
+    <!-- This space can be used for a title or status information -->
+  </div>
+
+  <!-- Right side: Action buttons -->
+  <div class="edit-bar-right">
+    <!-- Edit Button - Only shown in readonly mode -->
+    <button
+      *ngIf="readonly"
+      class="action-button edit-button"
+      (click)="edit()"
+      [disabled]="editDisabled || !selectedElement"
+      [class.disabled]="editDisabled || !selectedElement"
+    >
+      <span class="material-icons">edit</span>
+      <span class="button-text">Edit</span>
+    </button>
+
+    <!-- Save and Cancel Buttons - Only shown in edit mode -->
+    <div class="button-group" *ngIf="!readonly">
+      <button
+        class="action-button save-button"
+        (click)="save()"
+        [disabled]="saveDisabled || !selectedElement"
+        [class.disabled]="saveDisabled || !selectedElement"
+        [matTooltip]="saveTooltip"
+        [matTooltipDisabled]="!saveDisabled"
+      >
+        <span class="material-icons">save</span>
+        <span class="button-text">Save</span>
+      </button>
+
+      <button
+        class="action-button cancel-button"
+        (click)="cancel()"
+        [disabled]="!selectedElement"
+        [class.disabled]="!selectedElement"
+      >
+        <span class="material-icons">close</span>
+        <span class="button-text">Cancel</span>
+      </button>
+    </div>
+
+    <!-- New Button - Shown based on newDisplayed flag -->
+    <button
+      *ngIf="newDisplayed"
+      class="action-button new-button"
+      (click)="new()"
+    >
+      <span class="material-icons">add</span>
+      <span class="button-text">New</span>
+    </button>
+
+    <!-- Delete Button - Shown based on deleteDisplayed flag -->
+    <button
+      *ngIf="deleteDisplayed"
+      class="action-button delete-button"
+      (click)="delete()"
+      [disabled]="!selectedElement || !readonly"
+      [class.disabled]="!selectedElement || !readonly"
+    >
+      <span class="material-icons">delete</span>
+      <span class="button-text">Delete</span>
+    </button>
+  </div>
+</div>

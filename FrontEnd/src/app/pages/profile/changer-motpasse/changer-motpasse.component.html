@@ -1,0 +1,137 @@
+<div class="password-change-container">
+  <!-- Header Section -->
+  <div class="password-header">
+    <div class="header-content">
+      <h1>Change Password</h1>
+      <p>Update your password to keep your account secure</p>
+    </div>
+  </div>
+
+  <!-- Alert Messages -->
+  <div *ngIf="passwordChangeSuccess === true" class="alert alert-success">
+    <i class="fa fa-check-circle"></i>
+    <span>Password updated successfully</span>
+  </div>
+
+  <div *ngIf="passwordChangeSuccess === false" class="alert alert-danger">
+    <i class="fa fa-exclamation-circle"></i>
+    <span>Password modification failed</span>
+  </div>
+
+  <div *ngIf="passwordsDoNotMatch" class="alert alert-danger">
+    <i class="fa fa-exclamation-circle"></i>
+    <span>Passwords don't match</span>
+  </div>
+
+  <!-- Main Content -->
+  <div class="password-content">
+    <div class="password-card">
+      <div class="card-icon">
+        <i class="fa fa-lock"></i>
+      </div>
+
+      <div class="card-body">
+        <h2 class="card-title">Set New Password</h2>
+        <p class="card-description">Your password must be at least 4 characters long and include uppercase letters,
+          lowercase letters, numbers, and special characters.</p>
+
+        <form (ngSubmit)="changePassword()" #passwordForm="ngForm" class="password-form">
+          <!-- New Password Field -->
+          <div class="form-group">
+            <label for="newPassword">New Password</label>
+            <div class="input-container" [ngClass]="{
+              'valid-input': newPasswordIsValid() && !passwordsDoNotMatch && newPassword !== '' && newPasswordInput.dirty,
+              'invalid-input': (!newPasswordIsValid() || passwordsDoNotMatch || newPassword) && newPasswordInput.dirty
+            }">
+              <i class="fa fa-key input-icon"></i>
+              <input type="password" id="newPassword" [(ngModel)]="newPassword" name="newPassword"
+                placeholder="Enter your new password" #newPasswordInput="ngModel" required minlength="4"
+                maxlength="50" />
+              <i *ngIf="newPassword !== ''" class="fa validation-icon"
+                [ngClass]="{'fa-check-circle': newPasswordIsValid() && passwordIsStrongEnough(), 'fa-times-circle': !newPasswordIsValid() || !passwordIsStrongEnough()}"></i>
+            </div>
+
+            <!-- Password Strength Indicator -->
+            <div >  <!-- class="password-strength-container" -->
+              <app-password-strength-bar [passwordToCheck]="newPassword"></app-password-strength-bar>
+
+              <!-- <div class="password-requirements" *ngIf="newPassword !== ''">
+                <div class="requirement" [ngClass]="{'requirement-met': isUppercasePresent(newPassword)}">
+                  <i class="fa"
+                    [ngClass]="{'fa-check-circle': isUppercasePresent(newPassword), 'fa-circle-o': !isUppercasePresent(newPassword)}"></i>
+                  <span>Uppercase letter</span>
+                </div>
+                <div class="requirement" [ngClass]="{'requirement-met': isLowercasePresent(newPassword)}">
+                  <i class="fa"
+                    [ngClass]="{'fa-check-circle': isLowercasePresent(newPassword), 'fa-circle-o': !isLowercasePresent(newPassword)}"></i>
+                  <span>Lowercase letter</span>
+                </div>
+                <div class="requirement" [ngClass]="{'requirement-met': isNumberPresent(newPassword)}">
+                  <i class="fa"
+                    [ngClass]="{'fa-check-circle': isNumberPresent(newPassword), 'fa-circle-o': !isNumberPresent(newPassword)}"></i>
+                  <span>Number</span>
+                </div>
+                <div class="requirement" [ngClass]="{'requirement-met': isSpecialCharacterPresent(newPassword)}">
+                  <i class="fa"
+                    [ngClass]="{'fa-check-circle': isSpecialCharacterPresent(newPassword), 'fa-circle-o': !isSpecialCharacterPresent(newPassword)}"></i>
+                  <span>Special character</span>
+                </div>
+                <div class="requirement" [ngClass]="{'requirement-met': newPassword.length >= 4}">
+                  <i class="fa"
+                    [ngClass]="{'fa-check-circle': newPassword.length >= 4, 'fa-circle-o': newPassword.length < 4}"></i>
+                  <span>At least 4 characters</span>
+                </div>
+              </div> -->
+            </div>
+          </div>
+
+          <!-- Confirm Password Field -->
+          <div class="form-group">
+            <label for="confirmPassword">Confirm New Password</label>
+            <div class="input-container" [ngClass]="{
+              'valid-input': !passwordsDoNotMatch && confirmPassword !== '' && newPassword === confirmPassword,
+              'invalid-input': passwordsDoNotMatch || (confirmPassword !== '' && newPassword !== confirmPassword)
+            }">
+              <i class="fa fa-key input-icon"></i>
+              <input type="password" id="confirmPassword" [(ngModel)]="confirmPassword" name="confirmPassword"
+                placeholder="Confirm your new password" required minlength="4" maxlength="50" />
+              <i *ngIf="confirmPassword !== ''" class="fa validation-icon"
+                [ngClass]="{'fa-check-circle': newPassword === confirmPassword, 'fa-times-circle': newPassword !== confirmPassword}"></i>
+            </div>
+            <div class="error-message"
+              *ngIf="passwordsDoNotMatch || (confirmPassword !== '' && newPassword !== confirmPassword)">
+              Passwords do not match
+            </div>
+          </div>
+
+          <!-- Form Actions -->
+          <div class="form-actions">
+            <a class="cancel-button" [routerLink]="['/profile']">
+              <i class="fa fa-arrow-left"></i>
+              Back to Profile
+            </a>
+            <button type="submit" class="save-button"
+              [disabled]="passwordsDoNotMatch || !newPasswordIsValid() || !passwordIsStrongEnough() || isSubmitting">
+              <i class="fa" [ngClass]="{'fa-spinner fa-spin': isSubmitting, 'fa-save': !isSubmitting}"></i>
+              {{ isSubmitting ? 'Updating...' : 'Update Password' }}
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+
+    <!-- Security Tips -->
+    <div class="security-tips">
+      <h3 class="tips-title">
+        <i class="fa fa-shield"></i>
+        Password Security Tips
+      </h3>
+      <ul class="tips-list">
+        <li>Use a unique password for each of your important accounts</li>
+        <li>Never share your password with anyone</li>
+        <li>Consider using a password manager to generate and store strong passwords</li>
+        <li>Change your password periodically, especially if you suspect it might have been compromised</li>
+      </ul>
+    </div>
+  </div>
+</div>

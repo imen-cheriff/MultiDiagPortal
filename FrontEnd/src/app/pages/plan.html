@@ -1,0 +1,817 @@
+<div class="planification-container">
+  <!-- Main tabs navigation -->
+  <div class="tabs-navigation">
+    <div
+      class="tab"
+      [class.active]="activeTab === 'years'"
+      (click)="setActiveTab('years')"
+    >
+      <span class="material-icons">calendar_today</span>
+      <span>Years</span>
+      <span class="tab-badge">{{ years.length }}</span>
+    </div>
+    <div
+      class="tab"
+      [class.active]="activeTab === 'plans'"
+      (click)="setActiveTab('plans')"
+    >
+      <span class="material-icons">assignment</span>
+      <span>Plans</span>
+      <span *ngIf="selectedYear" class="tab-badge">{{
+        getFilteredPlans().length
+      }}</span>
+    </div>
+    <div
+      class="tab"
+      [class.active]="activeTab === 'metrics'"
+      (click)="setActiveTab('metrics')"
+    >
+      <span class="material-icons">insert_chart</span>
+      <span>Metrics</span>
+    </div>
+    <div
+      class="tab"
+      [class.active]="activeTab === 'cars'"
+      (click)="setActiveTab('cars')"
+    >
+      <span class="material-icons">directions_car</span>
+      <span>Cars</span>
+    </div>
+  </div>
+
+  <!-- Tab content -->
+  <div class="tab-content">
+    <!-- Years Tab -->
+    <div *ngIf="activeTab === 'years'" class="years-grid">
+      <div
+        *ngFor="let yearSummary of years"
+        class="year-card"
+        [class.active]="selectedYear === yearSummary.year"
+        (click)="selectYear(yearSummary.year)"
+      >
+        <div class="year-header">
+          <div class="year-number">{{ yearSummary.year }}</div>
+          <button
+            class="action-button small"
+            *ngIf="selectedYear === yearSummary.year"
+          >
+            <span class="material-icons">check_circle</span>
+            Selected
+          </button>
+        </div>
+        <div class="year-stats">
+          <div class="stat-item">
+            <span class="stat-value">{{ yearSummary.totalPlans }}</span>
+            <span class="stat-label">Plans</span>
+          </div>
+          <div class="stat-item">
+            <span class="stat-value">{{ yearSummary.completedPlans }}</span>
+            <span class="stat-label">Completed</span>
+          </div>
+          <div class="stat-item">
+            <span class="stat-value">{{ yearSummary.inProgressPlans }}</span>
+            <span class="stat-label">In Progress</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Add Year Button -->
+      <div
+        class="year-card"
+        style="display: flex; justify-content: center; align-items: center"
+        (click)="addyears()"
+      >
+        <div style="text-align: center">
+          <span
+            class="material-icons"
+            style="font-size: 48px; color: #6fa87e; margin-bottom: 16px"
+            >add_circle</span
+          >
+          <div style="font-weight: 500; color: #6fa87e">Add New Year</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Plans Tab -->
+    <div *ngIf="activeTab === 'plans'" class="plans-section">
+      <!-- Header with year and actions -->
+      <div class="plans-header">
+        <div class="plans-title">
+          <span class="material-icons">assignment</span>
+          <span *ngIf="selectedYear">Action Plans for {{ selectedYear }}</span>
+          <span *ngIf="!selectedYear">Select a Year</span>
+        </div>
+
+        <div class="header-actions" *ngIf="selectedYear">
+          <div class="search-container">
+            <span class="material-icons search-icon">search</span>
+            <input
+              type="text"
+              [(ngModel)]="filterText"
+              placeholder="Search plans..."
+              class="search-input"
+            />
+          </div>
+
+          <button class="action-button primary" (click)="startCreatePlan()">
+            <span class="material-icons">add</span>
+            New Plan
+          </button>
+        </div>
+      </div>
+
+      <!-- Empty state when no year is selected -->
+      <div class="empty-state" *ngIf="!selectedYear">
+        <span class="material-icons">calendar_today</span>
+        <p>Please select a year first</p>
+        <button class="action-button primary" (click)="setActiveTab('years')">
+          Go to Years
+        </button>
+      </div>
+
+      <!-- Plans content -->
+      <div class="plans-content" *ngIf="selectedYear && !isCreatingPlan">
+        <!-- Plans list -->
+        <div class="plans-list">
+          <div class="plans-list-header">
+            <span>{{ getFilteredPlans().length }} Plans</span>
+          </div>
+
+          <div
+            *ngFor="let plan of getFilteredPlans()"
+            class="plan-card"
+            [class.active]="selectedPlan?.id === plan.id"
+            (click)="selectPlan(plan)"
+          >
+            <div class="plan-icon">
+              <span class="material-icons">{{
+                getPlanTypeIcon(plan.type)
+              }}</span>
+            </div>
+            <div class="plan-info">
+              <h3 class="plan-title">{{ plan.title }}</h3>
+              <p class="plan-description">{{ plan.description }}</p>
+              <div class="plan-meta">
+                <span class="plan-type">{{ plan.type | titlecase }}</span>
+                <span
+                  class="plan-status"
+                  [class]="getPlanStatusClass(plan.status)"
+                >
+                  {{ plan.status | titlecase }}
+                </span>
+              </div>
+              <div class="plan-details-info">
+                <div class="detail-item">
+                  <span class="material-icons">directions_car</span>
+                  <span>{{ plan.cars.length }}</span>
+                </div>
+                <div class="detail-item">
+                  <span class="material-icons">insert_chart</span>
+                  <span>{{ plan.metrics.length }}</span>
+                </div>
+                <div class="detail-item">
+                  <span class="material-icons">update</span>
+                  <span>{{ plan.updatedAt | date : "mediumDate" }}</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="empty-plans" *ngIf="getFilteredPlans().length === 0">
+            <span class="material-icons">description</span>
+            <p>No action plans found for this year</p>
+            <button class="action-button primary" (click)="startCreatePlan()">
+              Create New Plan
+            </button>
+          </div>
+        </div>
+
+        <!-- Plan details -->
+        <div class="plan-details">
+          <div class="empty-state" *ngIf="!selectedPlan">
+            <span class="material-icons">assignment</span>
+            <p>Please select a plan to view details</p>
+          </div>
+
+          <div *ngIf="selectedPlan">
+            <div class="details-header">
+              <div class="details-title-section">
+                <div class="plan-type-badge" [class]="selectedPlan.type">
+                  <span class="material-icons">{{
+                    getPlanTypeIcon(selectedPlan.type)
+                  }}</span>
+                  <span>{{ selectedPlan.type | titlecase }}</span>
+                </div>
+                <h2 class="details-title">{{ selectedPlan.title }}</h2>
+              </div>
+
+              <div class="details-actions">
+                <button class="action-button" (click)="toggleEditMode()">
+                  <span class="material-icons">{{
+                    editMode ? "visibility" : "edit"
+                  }}</span>
+                  {{ editMode ? "View" : "Edit" }}
+                </button>
+              </div>
+            </div>
+
+            <!-- Plan details tabs -->
+            <div class="details-tabs">
+              <div
+                class="details-tab"
+                [class.active]="detailsTab === 'overview'"
+                (click)="setDetailsTab('overview')"
+              >
+                Overview
+              </div>
+              <div
+                class="details-tab"
+                [class.active]="detailsTab === 'metrics'"
+                (click)="setDetailsTab('metrics')"
+              >
+                Metrics ({{ selectedPlan.metrics.length }})
+              </div>
+              <div
+                class="details-tab"
+                [class.active]="detailsTab === 'cars'"
+                (click)="setDetailsTab('cars')"
+              >
+                Cars ({{ selectedPlan.cars.length }})
+              </div>
+              <div
+                class="details-tab"
+                [class.active]="detailsTab === 'notes'"
+                (click)="setDetailsTab('notes')"
+                *ngIf="editMode"
+              >
+                Notes
+              </div>
+            </div>
+
+            <div class="details-content">
+              <!-- Overview Tab -->
+              <div
+                class="details-tab-content"
+                [class.active]="detailsTab === 'overview'"
+              >
+                <!-- Plan description -->
+                <div class="details-section">
+                  <h3 class="section-title">
+                    <span class="material-icons">description</span>
+                    Description
+                  </h3>
+                  <div *ngIf="!editMode" class="section-content">
+                    <p>{{ selectedPlan.description }}</p>
+                  </div>
+                  <div *ngIf="editMode" class="section-content">
+                    <textarea
+                      [(ngModel)]="selectedPlan.description"
+                      class="form-control"
+                      rows="4"
+                    ></textarea>
+                  </div>
+                </div>
+
+                <!-- Plan status -->
+                <div class="details-section">
+                  <h3 class="section-title">
+                    <span class="material-icons">flag</span>
+                    Status
+                  </h3>
+                  <div *ngIf="!editMode" class="section-content">
+                    <span
+                      class="status-badge"
+                      [class]="getPlanStatusClass(selectedPlan.status)"
+                    >
+                      <span class="material-icons">
+                        {{ getStatusIcon(selectedPlan.status) }}
+                      </span>
+                      {{ selectedPlan.status | titlecase }}
+                    </span>
+                  </div>
+                  <div *ngIf="editMode" class="section-content">
+                    <select
+                      [(ngModel)]="selectedPlan.status"
+                      class="form-control"
+                    >
+                      <option value="draft">Draft</option>
+                      <option value="in-progress">In Progress</option>
+                      <option value="completed">Completed</option>
+                      <option value="cancelled">Cancelled</option>
+                    </select>
+                  </div>
+                </div>
+
+                <!-- Plan summary -->
+                <div class="details-section">
+                  <h3 class="section-title">
+                    <span class="material-icons">summarize</span>
+                    Summary
+                  </h3>
+                  <div class="section-content">
+                    <div
+                      class="metrics-grid"
+                      style="grid-template-columns: repeat(2, 1fr)"
+                    >
+                      <div class="metric-card">
+                        <div class="metric-name">Created</div>
+                        <div class="value-number" style="margin-top: 8px">
+                          {{ selectedPlan.createdAt | date : "mediumDate" }}
+                        </div>
+                      </div>
+                      <div class="metric-card">
+                        <div class="metric-name">Last Updated</div>
+                        <div class="value-number" style="margin-top: 8px">
+                          {{ selectedPlan.updatedAt | date : "mediumDate" }}
+                        </div>
+                      </div>
+                      <div class="metric-card">
+                        <div class="metric-name">Metrics</div>
+                        <div class="value-number" style="margin-top: 8px">
+                          {{ selectedPlan.metrics.length }} metrics defined
+                        </div>
+                      </div>
+                      <div class="metric-card">
+                        <div class="metric-name">Cars</div>
+                        <div class="value-number" style="margin-top: 8px">
+                          {{ selectedPlan.cars.length }} cars assigned
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Metrics Tab -->
+              <div
+                class="details-tab-content"
+                [class.active]="detailsTab === 'metrics'"
+              >
+                <div class="section-header">
+                  <h3 class="section-title">
+                    <span class="material-icons">insert_chart</span>
+                    Metrics
+                  </h3>
+                  <button
+                    *ngIf="editMode"
+                    class="action-button small"
+                    (click)="addMetric()"
+                  >
+                    <span class="material-icons">add</span>
+                    Add Metric
+                  </button>
+                </div>
+
+                <div class="metrics-grid">
+                  <div
+                    *ngFor="let metric of selectedPlan.metrics"
+                    class="metric-card"
+                  >
+                    <div class="metric-header">
+                      <h4 class="metric-name">
+                        <span *ngIf="!editMode">{{ metric.name }}</span>
+                        <input
+                          *ngIf="editMode"
+                          type="text"
+                          [(ngModel)]="metric.name"
+                          class="form-control"
+                        />
+                      </h4>
+                      <button
+                        *ngIf="editMode"
+                        class="delete-button"
+                        (click)="
+                          removeMetric(metric.id); $event.stopPropagation()
+                        "
+                      >
+                        <span class="material-icons">close</span>
+                      </button>
+                    </div>
+
+                    <div class="metric-values">
+                      <div class="metric-value-item">
+                        <span class="value-label">Current</span>
+                        <span *ngIf="!editMode" class="value-number">
+                          {{ metric.current }}{{ metric.unit }}
+                        </span>
+                        <div *ngIf="editMode" class="value-edit">
+                          <input
+                            type="number"
+                            [(ngModel)]="metric.current"
+                            class="form-control"
+                          />
+                          <input
+                            type="text"
+                            [(ngModel)]="metric.unit"
+                            class="form-control unit-input"
+                          />
+                        </div>
+                      </div>
+
+                      <div class="metric-value-item">
+                        <span class="value-label">Target</span>
+                        <span *ngIf="!editMode" class="value-number">
+                          {{ metric.target }}{{ metric.unit }}
+                        </span>
+                        <div *ngIf="editMode" class="value-edit">
+                          <input
+                            type="number"
+                            [(ngModel)]="metric.target"
+                            class="form-control"
+                          />
+                        </div>
+                      </div>
+                    </div>
+
+                    <div class="metric-progress">
+                      <div class="progress-bar">
+                        <div
+                          class="progress-fill"
+                          [style.width.%]="getProgressPercentage(metric)"
+                        ></div>
+                      </div>
+                      <span class="progress-text">
+                        {{ getProgressPercentage(metric) | number : "1.0-0" }}%
+                      </span>
+                    </div>
+                  </div>
+
+                  <div
+                    *ngIf="selectedPlan.metrics.length === 0"
+                    class="empty-metrics"
+                  >
+                    <span class="material-icons">insert_chart</span>
+                    <p>No metrics defined for this plan</p>
+                    <button
+                      *ngIf="editMode"
+                      class="action-button primary"
+                      (click)="addMetric()"
+                    >
+                      Add First Metric
+                    </button>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Cars Tab -->
+              <div
+                class="details-tab-content"
+                [class.active]="detailsTab === 'cars'"
+              >
+                <div class="section-header">
+                  <h3 class="section-title">
+                    <span class="material-icons">directions_car</span>
+                    Cars
+                  </h3>
+                  <button
+                    *ngIf="editMode"
+                    class="action-button small"
+                    (click)="addCar()"
+                  >
+                    <span class="material-icons">add</span>
+                    Add Car
+                  </button>
+                </div>
+
+                <div class="cars-table-container">
+                  <table class="cars-table">
+                    <thead>
+                      <tr>
+                        <th>Brand</th>
+                        <th>Model</th>
+                        <th>Target Date</th>
+                        <th>Responsible</th>
+                        <th>Status</th>
+                        <th *ngIf="editMode">Actions</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr *ngFor="let car of selectedPlan.cars">
+                        <td>
+                          <span *ngIf="!editMode">{{ car.brand }}</span>
+                          <input
+                            *ngIf="editMode"
+                            type="text"
+                            [(ngModel)]="car.brand"
+                            class="form-control"
+                          />
+                        </td>
+                        <td>
+                          <span *ngIf="!editMode">{{ car.model }}</span>
+                          <input
+                            *ngIf="editMode"
+                            type="text"
+                            [(ngModel)]="car.model"
+                            class="form-control"
+                          />
+                        </td>
+                        <td>
+                          <span *ngIf="!editMode">{{
+                            car.targetDate | date : "mediumDate"
+                          }}</span>
+                          <input
+                            *ngIf="editMode"
+                            type="date"
+                            [ngModel]="car.targetDate | date : 'yyyy-MM-dd'"
+                            (ngModelChange)="car.targetDate = $event"
+                            class="form-control"
+                          />
+                        </td>
+                        <td>
+                          <span *ngIf="!editMode">{{ car.responsible }}</span>
+                          <input
+                            *ngIf="editMode"
+                            type="text"
+                            [(ngModel)]="car.responsible"
+                            class="form-control"
+                          />
+                        </td>
+                        <td>
+                          <span
+                            *ngIf="!editMode"
+                            class="status-badge"
+                            [class]="getCarStatusClass(car.status)"
+                          >
+                            {{ car.status | titlecase }}
+                          </span>
+                          <select
+                            *ngIf="editMode"
+                            [(ngModel)]="car.status"
+                            class="form-control"
+                          >
+                            <option value="planned">Planned</option>
+                            <option value="in-progress">In Progress</option>
+                            <option value="completed">Completed</option>
+                            <option value="delayed">Delayed</option>
+                          </select>
+                        </td>
+                        <td *ngIf="editMode">
+                          <button
+                            class="delete-button"
+                            (click)="removeCar(car.id)"
+                          >
+                            <span class="material-icons">delete</span>
+                          </button>
+                        </td>
+                      </tr>
+                      <tr *ngIf="selectedPlan.cars.length === 0">
+                        <td colspan="6" class="empty-message">
+                          No cars defined for this plan
+                        </td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+
+              <!-- Notes Tab -->
+              <div
+                class="details-tab-content"
+                [class.active]="detailsTab === 'notes'"
+              >
+                <div class="section-header">
+                  <h3 class="section-title">
+                    <span class="material-icons">notes</span>
+                    Notes for Cars
+                  </h3>
+                </div>
+
+                <div
+                  *ngFor="let car of selectedPlan.cars"
+                  class="details-section"
+                >
+                  <h4 class="section-title" style="font-size: 14px">
+                    {{ car.brand }} {{ car.model }}
+                  </h4>
+                  <textarea
+                    [(ngModel)]="car.notes"
+                    class="form-control"
+                    rows="3"
+                    placeholder="Enter notes for this car..."
+                  ></textarea>
+                </div>
+
+                <div
+                  *ngIf="selectedPlan.cars.length === 0"
+                  class="empty-metrics"
+                >
+                  <span class="material-icons">directions_car</span>
+                  <p>No cars to add notes for</p>
+                  <button class="action-button primary" (click)="addCar()">
+                    Add Car
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Create new plan form -->
+      <div class="create-plan-form" *ngIf="isCreatingPlan && selectedYear">
+        <h3 class="form-title">Create New Action Plan</h3>
+
+        <div class="form-group">
+          <label for="planType">Plan Type</label>
+          <select id="planType" [(ngModel)]="newPlanType" class="form-control">
+            <option value="goals">Goals</option>
+            <option value="advancement">Advancement</option>
+            <option value="roadmap">Roadmap</option>
+            <option value="budget">Budget</option>
+            <option value="resources">Resources</option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label for="planTitle">Title</label>
+          <input
+            type="text"
+            id="planTitle"
+            [(ngModel)]="newPlanTitle"
+            placeholder="Enter plan title"
+            class="form-control"
+            required
+          />
+        </div>
+
+        <div class="form-group">
+          <label for="planDescription">Description</label>
+          <textarea
+            id="planDescription"
+            [(ngModel)]="newPlanDescription"
+            placeholder="Enter plan description"
+            class="form-control"
+            rows="4"
+          ></textarea>
+        </div>
+
+        <div class="form-actions">
+          <button class="action-button secondary" (click)="cancelCreatePlan()">
+            Cancel
+          </button>
+          <button
+            class="action-button primary"
+            [disabled]="!newPlanTitle"
+            (click)="createPlan()"
+          >
+            Create Plan
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Metrics Tab -->
+    <div *ngIf="activeTab === 'metrics'" class="plans-section">
+      <div class="plans-header">
+        <div class="plans-title">
+          <span class="material-icons">insert_chart</span>
+          <span>Metrics Overview</span>
+        </div>
+      </div>
+
+      <div class="empty-state" *ngIf="!selectedYear">
+        <span class="material-icons">calendar_today</span>
+        <p>Please select a year first to view metrics</p>
+        <button class="action-button primary" (click)="setActiveTab('years')">
+          Go to Years
+        </button>
+      </div>
+
+      <div
+        *ngIf="selectedYear"
+        class="plans-content"
+        style="flex-direction: column"
+      >
+        <div class="plan-details" style="margin-bottom: 20px">
+          <div class="details-header">
+            <h2 class="details-title">Metrics for {{ selectedYear }}</h2>
+          </div>
+          <div class="details-content">
+            <div class="metrics-grid">
+              <ng-container *ngFor="let plan of getFilteredPlans()">
+                <ng-container *ngFor="let metric of plan.metrics">
+                  <div class="metric-card">
+                    <div class="metric-header">
+                      <h4 class="metric-name">{{ metric.name }}</h4>
+                      <div class="plan-type">{{ plan.title }}</div>
+                    </div>
+                    <div class="metric-values">
+                      <div class="metric-value-item">
+                        <span class="value-label">Current</span>
+                        <span class="value-number">
+                          {{ metric.current }}{{ metric.unit }}
+                        </span>
+                      </div>
+                      <div class="metric-value-item">
+                        <span class="value-label">Target</span>
+                        <span class="value-number">
+                          {{ metric.target }}{{ metric.unit }}
+                        </span>
+                      </div>
+                    </div>
+                    <div class="metric-progress">
+                      <div class="progress-bar">
+                        <div
+                          class="progress-fill"
+                          [style.width.%]="getProgressPercentage(metric)"
+                        ></div>
+                      </div>
+                      <span class="progress-text">
+                        {{ getProgressPercentage(metric) | number : "1.0-0" }}%
+                      </span>
+                    </div>
+                  </div>
+                </ng-container>
+              </ng-container>
+
+              <div
+                *ngIf="!hasAnyMetrics()"
+                class="empty-metrics"
+                style="grid-column: 1 / -1"
+              >
+                <span class="material-icons">insert_chart</span>
+                <p>No metrics found for this year</p>
+                <button
+                  class="action-button primary"
+                  (click)="setActiveTab('plans')"
+                >
+                  Go to Plans
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Cars Tab -->
+    <div *ngIf="activeTab === 'cars'" class="plans-section">
+      <div class="plans-header">
+        <div class="plans-title">
+          <span class="material-icons">directions_car</span>
+          <span>Cars Overview</span>
+        </div>
+      </div>
+
+      <div class="empty-state" *ngIf="!selectedYear">
+        <span class="material-icons">calendar_today</span>
+        <p>Please select a year first to view cars</p>
+        <button class="action-button primary" (click)="setActiveTab('years')">
+          Go to Years
+        </button>
+      </div>
+
+      <div
+        *ngIf="selectedYear"
+        class="plans-content"
+        style="flex-direction: column"
+      >
+        <div class="plan-details">
+          <div class="details-header">
+            <h2 class="details-title">Cars for {{ selectedYear }}</h2>
+          </div>
+          <div class="details-content">
+            <div class="cars-table-container">
+              <table class="cars-table">
+                <thead>
+                  <tr>
+                    <th>Brand</th>
+                    <th>Model</th>
+                    <th>Plan</th>
+                    <th>Target Date</th>
+                    <th>Responsible</th>
+                    <th>Status</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <ng-container *ngFor="let plan of getFilteredPlans()">
+                    <tr *ngFor="let car of plan.cars">
+                      <td>{{ car.brand }}</td>
+                      <td>{{ car.model }}</td>
+                      <td>{{ plan.title }}</td>
+                      <td>{{ car.targetDate | date : "mediumDate" }}</td>
+                      <td>{{ car.responsible }}</td>
+                      <td>
+                        <span
+                          class="status-badge"
+                          [class]="getCarStatusClass(car.status)"
+                        >
+                          {{ car.status | titlecase }}
+                        </span>
+                      </td>
+                    </tr>
+                  </ng-container>
+                  <tr *ngIf="!hasAnyCars()">
+                    <td colspan="6" class="empty-message">
+                      No cars found for this year
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,399 @@
+// Variables
+$primary-color: #76a776;
+$primary-dark: #2980b9;
+$secondary-color: #f5f5f5;
+$text-color: #333;
+$text-light: #777;
+$border-color: #e0e0e0;
+$success-color: #69b578;
+$error-color: #e74c3c;
+$warning-color: #f39c12;
+$shadow-color: rgba(0, 0, 0, 0.1);
+
+// Base styles
+:host {
+  display: block;
+  background-color: #f9f9f9;
+  min-height: 100vh;
+}
+
+.password-change-container {
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 20px;
+}
+
+// Header Section
+.password-header {
+  // background: linear-gradient(135deg, $primary-color, $primary-dark);
+  border-radius: 10px;
+  padding: 30px;
+  margin-bottom: 50px;
+  color: rgb(157, 155, 155);
+  // box-shadow: 0 4px 12px rgba($primary-dark, 0.2);
+  
+  .header-content {
+    max-width: 600px;
+    
+    h1 {
+      font-size: 28px;
+      margin: 0 0 10px 0;
+      font-weight: 600;
+    }
+    
+    p {
+      font-size: 16px;
+      margin: 0;
+      opacity: 0.9;
+    }
+  }
+}
+
+// Alert Messages
+.alert {
+  display: flex;
+  align-items: center;
+  padding: 15px 20px;
+  border-radius: 8px;
+  margin-bottom: 70px;
+  margin-top: -70px;
+  
+  i {
+    margin-right: 10px;
+    font-size: 18px;
+  }
+  
+  &.alert-success {
+    background-color: rgba($success-color, 0.1);
+    color: darken($success-color, 10%);
+    border-left: 4px solid $success-color;
+  }
+  
+  &.alert-danger {
+    background-color: rgba($error-color, 0.1);
+    color: darken($error-color, 10%);
+    border-left: 4px solid $error-color;
+  }
+}
+
+// Password Content
+.password-content {
+  margin-bottom: 40px;
+}
+
+// Password Card
+.password-card {
+  background-color: rgb(255, 255, 255);
+  border-radius: 10px;
+  box-shadow: 0 2px 20px $shadow-color;
+  overflow: hidden;
+  margin-bottom: -5x;
+  margin-top: -50px;
+  position: relative;
+  padding: 30px;
+  height: 58vh;
+  
+  .card-icon {
+    position: absolute;
+    margin-bottom: -50px;
+    top: 10px;
+    left: 30px;
+    width: 45px;
+    height: 45px;
+    background-color: $primary-color;
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    box-shadow: 0 4px 10px rgba($primary-color, 0.3);
+    
+    i {
+      font-size: 24px;
+      color: white;
+    }
+  }
+  
+  .card-body {
+    padding-top: 30px;
+    margin-top: 20px;
+  }
+  
+  .card-title {
+    font-size: 20px;
+    font-weight: 600;
+    color: $text-color;
+    margin: 0 0 10px 0;
+  }
+  
+  .card-description {
+    font-size: 12px;
+    color: $text-light;
+    margin: 0 0 30px 0;
+    line-height: 1.5;
+  }
+}
+
+// Password Form
+.password-form {
+  .form-group {
+    margin-bottom: 25px;
+    
+    label {
+      display: block;
+      font-size: 12 px;
+      font-weight: 500;
+      color: $text-color;
+      margin-bottom: 8px;
+    }
+    
+    .input-container {
+      position: relative;
+      
+      .input-icon {
+        position: absolute;
+        left: 12px;
+        top: 50%;
+        transform: translateY(-50%);
+        color: $text-light;
+        font-size: 16px;
+      }
+      
+      .validation-icon {
+        position: absolute;
+        right: 12px;
+        top: 50%;
+        transform: translateY(-50%);
+        font-size: 16px;
+        
+        &.fa-check-circle {
+          color: $success-color;
+        }
+        
+        &.fa-times-circle {
+          color: $error-color;
+        }
+      }
+      
+      input {
+        width: 100%;
+        padding: 12px 40px;
+        border: 1px solid $border-color;
+        border-radius: 6px;
+        font-size: 14px;
+        color: $text-color;
+        transition: all 0.2s;
+        
+        &:focus {
+          outline: none;
+          border-color: $primary-color;
+          box-shadow: 0 0 0 2px rgba($primary-color, 0.1);
+        }
+      }
+      
+      &.valid-input {
+        input {
+          border-color: $success-color;
+          border-left-width: 4px;
+        }
+        
+        .validation-icon {
+          color: $success-color;
+        }
+      }
+      
+      &.invalid-input {
+        input {
+          border-color: $error-color;
+          border-left-width: 4px;
+        }
+        
+        .validation-icon {
+          color: $error-color;
+        }
+      }
+    }
+    
+    .error-message {
+      font-size: 12px;
+      color: $error-color;
+      margin-top: 5px;
+    }
+  }
+  
+  // Password Strength
+  .password-strength-container {
+    margin-top: 15px;
+    
+    .password-requirements {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+      gap: 10px;
+      margin-top: 15px;
+      
+      .requirement {
+        display: flex;
+        align-items: center;
+        font-size: 12px;
+        color: $text-light;
+        
+        i {
+          font-size: 14px;
+          margin-right: 5px;
+          color: $text-light;
+        }
+        
+        &.requirement-met {
+          color: $success-color;
+          
+          i {
+            color: $success-color;
+          }
+        }
+      }
+    }
+  }
+  
+  // Form Actions
+  .form-actions {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 30px;
+    
+    .cancel-button, .save-button {
+      display: flex;
+      align-items: center;
+      padding: 12px 20px;
+      border-radius: 6px;
+      font-size: 14px;
+      font-weight: 500;
+      cursor: pointer;
+      transition: all 0.2s;
+      text-decoration: none;
+      
+      i {
+        margin-right: 8px;
+        font-size: 16px;
+      }
+    }
+    
+    .cancel-button {
+      background-color: white;
+      color: $text-color;
+      border: 1px solid $border-color;
+      transition: all 0.2s;
+      
+      &:hover {
+        &:hover {
+          background-color: $secondary-color;
+          border-color: $text-light;
+          color: $text-light;
+        }
+      }
+    }
+    
+    .save-button {
+      background-color: $success-color;
+      color: white;
+      border: none;
+      
+      &:hover {
+        background-color: darken($success-color, 10%);
+      }
+      
+      &:disabled {
+        background-color: lighten($success-color, 20%);
+        cursor: not-allowed;
+      }
+    }
+  }
+}
+
+// Security Tips
+.security-tips {
+  background-color: white;
+  border-radius: 10px;
+  box-shadow: 0 2px 10px $shadow-color;
+  padding: 20px;
+  margin-top: -20px;
+  
+  .tips-title {
+    display: flex;
+    align-items: center;
+    font-size: 18px;
+    font-weight: 600;
+    color: $text-color;
+    margin: 0 0 15px 0;
+    
+    i {
+      color: $warning-color;
+      margin-right: 10px;
+      font-size: 20px;
+    }
+  }
+  
+  .tips-list {
+    margin: 0;
+    padding-left: 20px;
+    
+    li {
+      color: $text-light;
+      font-size: 14px;
+      margin-bottom: 10px;
+      line-height: 1.5;
+      
+      &:last-child {
+        margin-bottom: 0;
+      }
+    }
+  }
+}
+
+// Responsive Adjustments
+@media (max-width: 768px) {
+  .password-header {
+    padding: 20px;
+    
+    .header-content {
+      h1 {
+        font-size: 24px;
+      }
+      
+      p {
+        font-size: 14px;
+      }
+    }
+  }
+  
+  .password-card {
+    padding: 20px;
+    
+    .card-icon {
+      width: 50px;
+      height: 50px;
+      top: -15px;
+      left: 20px;
+      
+      i {
+        font-size: 20px;
+      }
+    }
+    
+    .card-title {
+      font-size: 20px;
+    }
+  }
+  
+  .form-actions {
+    flex-direction: column-reverse;
+    gap: 10px;
+    
+    .cancel-button, .save-button {
+      width: 100%;
+      justify-content: center;
+    }
+  }
+  
+  .password-requirements {
+    grid-template-columns: 1fr !important;
+  }
+}

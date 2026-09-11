@@ -1,0 +1,88 @@
+
+.alert-box {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 1050;
+  background-color: #fff;
+  border-radius: 12px;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2);
+  padding: 24px;
+  width: 400px;
+  max-width: 90%;
+  display: flex;
+  flex-direction: column;
+
+
+  .modal-header {
+    margin-bottom: 16px;
+    justify-content: center;
+    text-align: center;
+    border-bottom: #bc4b43 2px solid;
+
+    h2 {
+      font-size: 1.5rem;
+      font-weight: 600;
+      color: #333;
+      margin-bottom: -0.1px;
+    }
+  }
+
+  .modal-body {
+    margin-bottom: 24px;
+    text-align: center;
+
+    p {
+      font-size: 1.15rem;
+      font-weight: 400;
+      color: #555;
+      line-height: 1.6;
+    }
+  }
+
+  .modal-footer {
+    display: flex;
+    justify-content: center;
+    gap: 5px;
+    margin-top: -15px;
+
+    button {
+      border-radius: 8px;
+      font-size: 1rem;
+      font-weight: 500;
+      cursor: pointer;
+      transition: all 0.3s ease;
+
+      /* Icon Styling */
+      .icon-small {
+        font-size: 2rem;
+        margin-top: -4px;
+        margin-left: -3px;
+      }
+
+      /* Cancel Button */
+      &.btn-cancel {
+        background-color: #555;
+        color: #ffffff;
+        border: 1px solid #ddd;
+
+        &:hover {
+          background-color: #4a4a4a;
+        }
+      }
+
+      /* Confirm Button */
+      &.btn-confirm {
+        background-color: #bc4b43;
+        color: #fff;
+        border: 1px solid #ddd;
+
+        &:hover {
+          background-color: #932c2a;
+        }
+      }
+    }
+  }
+
+}

@@ -1,0 +1,75 @@
+<div class="edit-bar">
+  <!-- Left side: for custom content if needed -->
+  <div class="edit-bar-left">
+    <ng-content></ng-content>
+    <!-- Allow slot for optional custom content -->
+  </div>
+
+  <!-- Right side: Action buttons -->
+  <div class="edit-bar-right">
+
+
+    <!-- History -->
+    <button *ngIf="readonly" type="button" class="action-button history-button" (click)="onHistoryClick()"
+      [disabled]="!selectedElement" [class.disabled]="!selectedElement">
+      <span class="material-icons">history</span>
+      <span class="button-text">History</span>
+    </button>
+
+    <!-- Export -->
+    <div *ngIf="readonly">
+      <button type="button" class="action-button export-button" (click)="onExportClick()" [disabled]="!selectedElement"
+        [class.disabled]="!selectedElement">
+        <span class="material-icons">download</span>
+        <span class="button-text">Export</span>
+      </button>
+    </div>
+
+    <!-- Edit Button - Only shown in readonly mode -->
+    <button *ngIf="readonly" type="button" class="action-button edit-button" (click)="onEditClick()"
+      [disabled]="editDisabled || !selectedElement" [class.disabled]="editDisabled || !selectedElement">
+      <span class="material-icons">edit</span>
+      <span class="button-text">Edit</span>
+    </button>
+
+    <!-- Save and Cancel Buttons - Only shown in edit mode -->
+    <div class="button-group" *ngIf="!readonly">
+      <button type="button" class="action-button save-button" (click)="onSaveClick()" [disabled]="!selectedElement"
+        [class.disabled]="!selectedElement" [matTooltip]="saveTooltip" [matTooltipDisabled]="!saveDisabled">
+        <!-- saveDisabled || -->
+        <!--  [matTooltipDisabled]="!saveDisabled"  -->
+        <span class="material-icons">save</span>
+        <span class="button-text">Save</span>
+      </button>
+
+      <button type="button" class="action-button cancel-button" (click)="onCancelClick()" [disabled]="!selectedElement"
+        [class.disabled]="!selectedElement">
+        <span class="material-icons">close</span>
+        <span class="button-text">Cancel</span>
+      </button>
+
+      <!-- Import Button (shown only in edit mode) -->
+      <button type="button" class="action-button import-button" (click)="onImportClick()">
+        <span class="material-icons">upload_file</span>
+        <span class="button-text">Import Excel</span>
+      </button>
+    </div>
+
+    <!-- New Button - Always shown -->
+    <button type="button" class="action-button new-button" (click)="onNewClick()">
+      <span class="material-icons">add</span>
+      <span class="button-text">New Cartography</span>
+    </button>
+
+    <!-- Delete Button - Only shown if deleteDisplayed is true -->
+    <button *ngIf="deleteDisplayed" type="button" class="action-button delete-button"
+      (click)="onDeleteClick(selectedElement?.id)" [disabled]="!selectedElement || !readonly"
+      [class.disabled]="!selectedElement || !readonly">
+      <span class="material-icons">delete</span>
+      <span class="button-text">Delete</span>
+    </button>
+  </div>
+
+  <!-- Hidden file input for Import Excel -->
+  <input #fileInput type="file" (change)="onFileSelected($event)" accept=".xls,.xlsx" style="display: none" />
+</div>

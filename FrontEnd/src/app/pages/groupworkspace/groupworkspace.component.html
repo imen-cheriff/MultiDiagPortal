@@ -1,0 +1,24 @@
+<div class="container-fluid h-100" style="background-color: #e3e3e3;">
+  <div class="row h-100">
+    <div class="col-md-4">
+      <app-groupworkspacelist
+        (cartoSelected)="onCartoSelected($event)"
+        (carSelected)="onCarSelected($event)"
+        (cartoUpdated)="onCartoUpdated()"
+        #cartographyList
+      >
+      </app-groupworkspacelist>
+    </div>
+    <div class="col-md-8">
+      <app-group-car-detail
+        [carto]="selectedCarto"
+        [allCartos]="availableCartos"
+        [selectedCarId]="selectedCarId"
+        (cartoUpdated)="onCartoUpdated()"
+        (cartoSelected)="onCartoTabSelected($event)"
+        #carDetailComponent
+      >       
+      </app-group-car-detail>
+    </div>
+  </div>
+</div>

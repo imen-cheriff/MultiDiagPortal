@@ -1,0 +1,296 @@
+<div class="history-page">
+  <div class="history-header">
+    <!-- <div class="header-content">
+      <div class="title-section">
+        <h1>Cartography Action History</h1>
+      </div>
+    </div> -->
+  </div>
+
+  <div class="main-content">
+    <!-- Filters Panel - Redesigned as a collapsible sidebar with regular HTML -->
+    <div class="filters-panel" [class.collapsed]="!isFilterExpanded">
+      <div class="panel-header" (click)="isFilterExpanded = !isFilterExpanded">
+        <h2><i class="icon icon-filter"></i> Filters</h2>
+        <button class="btn-icon toggle-filters">
+          <i class="icon" [ngClass]="
+              isFilterExpanded ? 'icon-chevron-left' : 'icon-chevron-right'
+            "></i>
+        </button>
+      </div>
+
+      <div class="filters-content" *ngIf="isFilterExpanded">
+        <!-- Search filter -->
+        <div class="filter-group search-filter">
+          <div class="form-group">
+            <div class="input-wrapper">
+              <i class="icon icon-search input-icon"></i>
+              <input type="text" class="form-control" [(ngModel)]="searchTerm" (input)="applyFilters()"
+                placeholder="Search in entity name, user, details..." />
+              <button *ngIf="searchTerm" class="btn-clear" (click)="searchTerm = ''; applyFilters()">
+                <i class="icon icon-close"></i>
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Date range -->
+        <div class="filter-group">
+          <h3>Date Range</h3>
+          <div class="date-range">
+            <div class="form-group">
+              <label for="startDate">Start</label>
+              <input type="date" id="startDate" class="form-control" [ngModel]="startDate | date : 'yyyy-MM-dd'"
+                (ngModelChange)="startDate = $event; applyFilters()" />
+            </div>
+
+            <div class="form-group">
+              <label for="endDate">End</label>
+              <input type="date" id="endDate" class="form-control" [ngModel]="endDate | date : 'yyyy-MM-dd'"
+                (ngModelChange)="endDate = $event; applyFilters()" />
+            </div>
+          </div>
+        </div>
+
+        <!-- User dropdown -->
+        <div class="filter-group">
+          <h3>User</h3>
+          <div class="form-group">
+            <div class="select-wrapper">
+              <select class="form-control" [(ngModel)]="selectedUser" (change)="applyFilters()">
+                <option [ngValue]="null">All Users</option>
+                <option *ngFor="let user of uniqueUsers" [ngValue]="user">
+                  {{ user }}
+                </option>
+              </select>
+              <i class="icon icon-chevron-down select-icon"></i>
+            </div>
+          </div>
+        </div>
+
+        <!-- Action Type dropdown -->
+        <div class="filter-group">
+          <h3>Action Type</h3>
+          <div class="form-group">
+            <div class="select-wrapper">
+              <select class="form-control" [(ngModel)]="selectedActionType" (change)="applyFilters()">
+                <option [ngValue]="null">All Actions</option>
+                <option value="add">Added</option>
+                <option value="modify">Modified</option>
+                <option value="delete">Deleted</option>
+                <option value="approve">Approved</option>
+                <option value="reject">Rejected</option>
+              </select>
+              <i class="icon icon-chevron-down select-icon"></i>
+            </div>
+          </div>
+        </div>
+
+        <!-- Entity Type dropdown -->
+        <div class="filter-group">
+          <h3>Entity Type</h3>
+          <div class="form-group">
+            <div class="select-wrapper">
+              <select class="form-control" [(ngModel)]="selectedEntityType" (change)="applyFilters()">
+                <option [ngValue]="null">All Entities</option>
+                <option value="carto">Cartography</option>
+                <option value="family">Family</option>
+                <option value="ecu">ECU</option>
+              </select>
+              <i class="icon icon-chevron-down select-icon"></i>
+            </div>
+          </div>
+        </div>
+        <div>
+          <button class="reset-button" style="margin-left: 70px;" (click)="resetFilters()">
+            <i class="icon icon-refresh"></i>
+            Reset Filters
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- History Data Section - Keep using Angular Material for now -->
+    <div class="history-data-section">
+      <div class="data-header">
+        <h2><i class="icon icon-history"></i> Action History</h2>
+        <div *ngIf="!selectedCartoId">
+          <button class="button-clear" (click)="deleteAllhistory()">
+            Clear All History
+          </button>
+        </div>
+
+        <div *ngIf="selectedCartoId">
+          <button class="button-carto" (click)="navigateBack()" matTooltip="Back to Cartography">
+            Cartography ID: <span class="highlight">{{ selectedCartoId }}</span>
+          </button>
+        </div>
+
+        <div class="data-stats">
+          <span class="stat-item">
+            <i class="icon icon-filter"></i>
+            Filtered: {{ filteredActions.length }}
+          </span>
+          <span class="stat-item">
+            <i class="icon icon-history"></i>
+            Total: {{ historyActions.length }}
+          </span>
+        </div>
+      </div>
+
+      <!-- Empty State -->
+      <div *ngIf="filteredActions.length === 0" class="empty-state">
+        <div class="empty-state-content">
+          <i class="icon icon-history-off large-icon"></i>
+          <h3>No History Records Found</h3>
+          <p>Try adjusting your filters or check back later for new activity</p>
+        </div>
+      </div>
+
+      <!-- History Table - Keep using Angular Material for now -->
+      <div *ngIf="filteredActions.length > 0" class="history-table-wrapper">
+        <table mat-table [dataSource]="displayedActions" matSort (matSortChange)="onSortChange($event)"
+          class="history-table">
+          <!-- Timestamp Column -->
+          <ng-container matColumnDef="timestamp">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header>
+              <div class="header-cell">
+                <i class="icon icon-schedule"></i>
+                <span>Timestamp</span>
+              </div>
+            </th>
+            <td mat-cell *matCellDef="let action" class="timestamp-cell">
+              <div class="timestamp-wrapper">
+                <div class="date">
+                  {{ action.timestamp | date : "MMM d, y" }}
+                </div>
+                <div class="time">{{ action.timestamp | date : "h:mm a" }}</div>
+              </div>
+            </td>
+          </ng-container>
+
+          <!-- User Column -->
+          <ng-container matColumnDef="userName">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header>
+              <div class="header-cell">
+                <i class="icon icon-person"></i>
+                <span>User</span>
+              </div>
+            </th>
+            <td mat-cell *matCellDef="let action" class="user-cell">
+              <div class="user-wrapper">
+                <div class="user-avatar">{{ action.userName.charAt(0) }}</div>
+                <span>{{ action.userName }}</span>
+              </div>
+            </td>
+          </ng-container>
+
+          <!-- Action Type Column -->
+          <ng-container matColumnDef="actionType">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header>
+              <div class="header-cell">
+                <i class="icon icon-category"></i>
+                <span>Action</span>
+              </div>
+            </th>
+            <td mat-cell *matCellDef="let action" class="action-cell">
+              <div class="action-badge" [ngClass]="getActionColor(action.actionType)">
+                <i class="icon" [ngClass]="'icon-' + getActionIcon(action.actionType)"></i>
+                <span>{{ getActionTypeLabel(action.actionType) }}</span>
+              </div>
+            </td>
+          </ng-container>
+
+          <!-- Entity Type Column -->
+          <ng-container matColumnDef="entityType">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header>
+              <div class="header-cell">
+                <i class="icon icon-category"></i>
+                <span>Entity Type</span>
+              </div>
+            </th>
+            <td mat-cell *matCellDef="let action" class="entity-type-cell">
+              <div class="entity-type-wrapper">
+                <!-- <i
+                  class="icon"
+                  [ngClass]="
+                    'icon-' +
+                    (action.entityType === 'carto'
+                      ? 'map'
+                      : action.entityType === 'family'
+                      ? 'database'
+                      : 'memory')
+                  "
+                ></i> -->
+                <i style="margin-right: 5px; color: #397d1e;"
+                  [ngClass]="'fa-solid ' + ('fa-' + (action.entityType === 'carto' ? 'map' : action.entityType === 'family' ? 'database' : 'memory'))"></i>
+                <span>&nbsp;</span><span>{{ getEntityTypeLabel(action.entityType) }}</span>
+              </div>
+            </td>
+          </ng-container>
+
+          <!-- Entity Name Column -->
+          <ng-container matColumnDef="entityName">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header>
+              <div class="header-cell">
+                <i class="icon icon-label"></i>
+                <span>Entity Name</span>
+              </div>
+            </th>
+            <td mat-cell *matCellDef="let action" class="entity-name-cell">
+              <span class="entity-name" *ngIf="action.entityType === 'carto'">Carto-{{ action.entityName || "Unnamed"
+                }}</span>
+              <span class="entity-name" *ngIf="action.entityType !== 'carto'">{{ action.entityName || "Unnamed"
+                }}</span>
+            </td>
+          </ng-container>
+
+          <!-- Details Column -->
+          <ng-container matColumnDef="details">
+            <th mat-header-cell *matHeaderCellDef>
+              <div class="header-cell">
+                <i class="icon icon-description"></i>
+                <span>Details</span>
+              </div>
+            </th>
+            <td mat-cell *matCellDef="let action" class="details-cell">
+              <div class="details-content" [title]="action.details">
+                {{ action.details || "No additional details" }}
+              </div>
+            </td>
+          </ng-container>
+
+          <!-- Delete button-->
+          <ng-container matColumnDef="delete">
+            <th mat-header-cell *matHeaderCellDef>
+              <div class="header-cell">
+                <!-- <i class="icon icon-delete"></i> -->
+                <span></span>
+              </div>
+            </th>
+            <td mat-cell *matCellDef="let action" class="delete-cell">
+              <button style="margin-right: -10px;" class="delete-button" (click)="deleteAction(action)"
+                matTooltip="Delete this action" title="Delete this action">
+                <i class="fa fa-minus"></i>
+              </button>
+            </td>
+          </ng-container>
+
+          <tr mat-header-row *matHeaderRowDef="displayedColumns; sticky: true"></tr>
+          <tr mat-row *matRowDef="let row; columns: displayedColumns" class="history-row"></tr>
+        </table>
+
+        <!-- <mat-paginator
+          [length]="totalItems"
+          [pageSize]="pageSize"
+          [pageSizeOptions]="pageSizeOptions"
+          [pageIndex]="pageIndex"
+          (page)="onPageChange($event)"
+          aria-label="Select page"
+          class="custom-paginator"
+        >
+        </mat-paginator> -->
+      </div>
+    </div>
+  </div>
+</div>

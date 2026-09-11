@@ -1,0 +1,216 @@
+// Define color variables to match the car management system
+$primary-light-green: #a8d5ba;
+$primary-dark-green: #6fa87e;
+$primary-grey: #ffffff;
+$secondary-grey: #f5f5f5;
+$dark-grey: #7d7d7d;
+$text-dark: #333;
+$danger-color: #e57373;
+$border-color: #e0e0e0;
+$shadow-color: rgba(0, 0, 0, 0.05);
+
+// Edit bar container
+.edit-bar-container {
+  z-index: 100;
+  background-color: white;
+  box-shadow: 0 2px 10px $shadow-color;
+}
+
+// Edit bar
+.edit-bar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px 20px;
+  max-width: 100%;
+  // margin-top: 8px;
+}
+
+// Left side of the edit bar
+.edit-bar-left {
+  display: flex;
+  align-items: center;
+}
+
+// Right side of the edit bar
+.edit-bar-right {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+// Button group
+.button-group {
+  display: flex;
+  gap: 10px;
+}
+
+// Base button styles
+.action-button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 8px 16px;
+  border-radius: 6px;
+  border: none;
+  font-size: 11px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  color: white;
+  width: 80px;
+  height: 32px;
+  
+  .material-icons {
+    font-size: 18px;
+  }
+  
+  .button-text {
+    white-space: nowrap;
+  }
+  
+  &.disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+    pointer-events: none;
+  }
+  
+  &:hover:not(.disabled) {
+    transform: translateY(-1px);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  }
+  
+  &:active:not(.disabled) {
+    transform: translateY(0);
+    box-shadow: 0 1px 4px rgba(0, 0, 0, 0.1);
+  }
+}
+
+// Edit button
+.edit-button {
+  background-color: $primary-dark-green;
+  
+  &:hover:not(.disabled) {
+    background-color: darken($primary-dark-green, 5%);
+  }
+}
+
+// Save button
+.save-button {
+  background-color: $primary-dark-green;
+  
+  &:hover:not(.disabled) {
+    background-color: darken($primary-dark-green, 5%);
+  }
+}
+
+// Cancel button
+.cancel-button {
+  background-color: $dark-grey;
+  
+  &:hover:not(.disabled) {
+    background-color: darken($dark-grey, 5%);
+  }
+}
+
+// New button
+.new-button {
+  background-color: $primary-dark-green;
+  width: 7vw;
+  
+  &:hover:not(.disabled) {
+    background-color: darken($primary-dark-green, 5%);
+  }
+}
+
+// Delete button
+.delete-button {
+  background-color: $danger-color;
+  
+  &:hover:not(.disabled) {
+    background-color: darken($danger-color, 5%);
+  }
+}
+
+.export-button {
+  background-color: #406a36;
+  
+  &:hover:not(.disabled) {
+    background-color: darken(#406a36, 5%);
+  }
+}
+
+.history-button {
+  background-color: #d3d3d3;
+  color: #000;
+  
+  &:hover:not(.disabled) {
+    background-color: darken(#d5d5d5, 5%);
+  }
+}
+
+// Responsive adjustments
+@media (max-width: 768px) {
+  .edit-bar {
+    padding: 8px 12px;
+    height: auto;
+    flex-wrap: wrap;
+  }
+  
+  .edit-bar-right {
+    flex-wrap: wrap;
+    justify-content: flex-end;
+    width: 100%;
+  }
+  
+  .action-button {
+    padding: 6px 12px;
+    min-width: auto;
+    
+    .button-text {
+      display: none;
+    }
+    
+    .material-icons {
+      margin-right: 0;
+    }
+  }
+}
+
+// For very small screens
+@media (max-width: 480px) {
+  .edit-bar-right {
+    justify-content: center;
+    gap: 5px;
+  }
+  
+  .action-button {
+    padding: 6px;
+    min-width: 36px;
+    height: 36px;
+  }
+}
+
+.import-button {
+  display: inline-flex;
+  align-items: center;
+  padding: 8px 12px;
+  background-color: #a1c95d;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 14px;
+  transition: background-color 0.3s;
+  width: 140px;
+  
+  &:hover {
+    background-color: #8eba42;
+  }
+  
+  .material-icons {
+    margin-right: 6px;
+    font-size: 18px;
+  }
+}

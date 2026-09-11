@@ -1,0 +1,421 @@
+{
+  "global": {
+    "swversion": "[v1.3.1]",
+    "home": "Home",
+    "user": {
+      "profile": "Settings",
+      "password": "Password",
+      "logout": "Sign out",
+      "authority": {
+        "ROLE_USER": "User",
+        "ROLE_ADMIN": "Administrator"
+      }
+    },
+    "products": "Products",
+    "statistics": "Statistics",
+    "management": "Management",
+    "users": "Users",
+    "groups": "Groups",
+    "info": "Information",
+    "versions": "Versions",
+    "updates": "Updates",
+    "status": "Status",
+    "delete": "Delete",
+    "created": {
+      "date": "Created date",
+      "by": "Created by"
+    },
+    "name": "Name",
+    "comment": "Comment",
+    "type": "Type",
+    "code": "Code",
+    "creation_date": "Creation date",
+    "lang": "Lang",
+    "title": "Title",
+    "description": "Description",
+    "characters": "characters"
+  },
+  "button": {
+    "edit": "EDIT",
+    "save": "SAVE",
+    "cancel": "CANCEL",
+    "new": "NEW",
+    "add": "ADD",
+    "delete": "DELETE",
+    "refresh": "REFRESH",
+    "create": "CREATE",
+    "create.group": "CREATE A GROUP",
+    "update": "UPDATE",
+    "previous": "PREVIOUS",
+    "next": "NEXT",
+    "proceed": "PROCEED",
+    "suspend": "SUSPEND",
+    "yes": "YES",
+    "no": "NO",
+    "renew-activation": "Renew activation email",
+    "create-update": "Create update"
+  },
+  "login": {
+    "error": {
+      "incorrect": "Incorrect username or password",
+      "forbidden": "Please login before continue",
+      "account": {
+        "locked": "Your account has been locked. Please contact an administrator",
+        "activated": "Your account isn't activated. Please click the email link to activate"
+      }
+    },
+    "username": "User name",
+    "password": {
+      "label": "Password",
+      "forgot": "Forgotten password?"
+    },
+    "rememberme": "Remember me",
+    "login": "Login",
+    "logout": "Logout",
+    "title": "Sign in"
+  },
+  "activate": {
+    "title": "Activation",
+    "messages": {
+      "success": "Your user account has been activated.",
+      "error": "Your user could not be activated."
+    },
+    "login": "Log in"
+  },
+  "password": {
+    "choose": "Choose a new password",
+    "reset": "Reset password",
+    "message": {
+      "newpassword": {
+        "title": "New password",
+        "placeholder": "New password",
+        "required": "Your password is required.",
+        "minlength": "Your password is required to be at least 4 characters.",
+        "maxlength": "Your password cannot be longer than 50 characters."
+      },
+      "confirmpassword": {
+        "title": "New password confirmation",
+        "placeholder": "New password confirmation",
+        "required": "Your confirmation password is required.",
+        "minlength": "Your confirmation password is required to be at least 4 characters.",
+        "maxlength": "Your confirmation password cannot be longer than 50 characters."
+      },
+      "resetpassword": {
+        "title": "Please enter the email address used to register"
+      },
+      "success": {
+        "init": "Your password has been reset.",
+        "change": "Password changed!",
+        "email.sent": "Please check your new emails and follow the instructions to reset your password."
+      },
+      "error": {
+        "init": "Your password couldn't be reset. Remember a password request is only valid for 24 hours.",
+        "change": "Your password couldn't be change",
+        "dontmatch": "The password and its confirmation do not match!"
+      }
+    }
+  },
+  "product": {
+    "info": "Product information",
+    "name": "Product name",
+    "code": "Product code",
+    "comment": "Product comment",
+    "profiles": "Product profiles",
+    "icon": "Icon",
+    "rights": "Rights on this product",
+    "edit": "Edit",
+    "delete": "Delete",
+    "please.select": "Please select a product",
+    "help": {
+      "create": "At the end of the product creation, you will be redirected to the group management page to add the product to one of it",
+      "profiles": "List of product profiles, coma separated"
+    },
+    "tab": {
+      "info": "Info",
+      "versions": "Versions",
+      "updates": "Updates"
+    }
+  },
+  "version": {
+    "info": "Version information",
+    "name": "Version name",
+    "comment": "Version comment",
+    "latest": "Lastest versions",
+    "description": "Description",
+    "code": "Code",
+    "date": "Creation date",
+    "please.select": "Please select a version",
+    "update": {
+      "associated": "Associated updates",
+      "from": "From this version",
+      "to": "To this version"
+    },
+    "graph": "Versions graph"
+  },
+  "update": {
+    "info": "Update information",
+    "name": "Update name",
+    "comment": "Update comment",
+    "type": "Update type",
+    "blocking": "Blocking update",
+    "major": "Major update",
+    "status": {
+      "label": "Update status",
+      "error": "Error",
+      "pending": "Pending",
+      "unpublished": "Unpublished",
+      "in_test": "In test",
+      "field_test": "Field test",
+      "published": "Published",
+      "suspended": "Suspended",
+      "next": {
+        "in_test": "TEST PHASE",
+        "field_test": "FIELD TEST PHASE",
+        "published": "PUBLISH",
+        "suspended": "SUSPEND"
+      }
+    },
+    "help": {
+      "name": "Update name",
+      "comment": "Update comment",
+      "type": "Update type",
+      "status": "Update status",
+      "pending": "The update file is being processed, please wait",
+      "noupdate": "Waiting to upload a file"
+    },
+    "code": "Update code",
+    "file": "Update files",
+    "descriptions": "Descriptions",
+    "latest": "Latest updates",
+    "latest.published": "Latest published updates",
+    "date": "Creation date",
+    "please.select": "Please select an update",
+    "applied_versions": "Applied versions",
+    "linked_version": "Linked version",
+    "create": {
+      "title": {
+        "main": "Update creation",
+        "product": "Select product",
+        "version": "Choose versions",
+        "update": "Define Update",
+        "summary": "Summary"
+      },
+      "help": {
+        "step1": "Select the product for the update",
+        "step2": {
+          "applied_versions": "Select the versions from which the update will be available",
+          "applied_versions.placeholder": "The applied versions will be displayed here",
+          "applied_versions.select": "Please select applied version(s)",
+          "major_update": "Or check to apply all versions (major update)",
+          "linked_version": "Select the linked version",
+          "linked_version.placeholder": "The linked version will be displayed here",
+          "linked_version.select": "Please select a linked version",
+          "button_create": "CREATE NEW VERSION"
+        },
+        "step3": "Define the update properties",
+        "step3.form.invalid": "Please fulfill the update properties form",
+        "step4": "Update summary"
+      },
+      "tooltip": {
+        "next1": "Go to version selection",
+        "prev2": "Bo back to product selection",
+        "next2": "Go to update definition",
+        "prev3": "Go back to version selection",
+        "next3": "Go to summary",
+        "prev4": "Go back to update definition",
+        "next4": "Save update and proceed to update's file upload",
+        "cancel": "Cancel update creation",
+        "linked_version": "The wanted version is not created yet?"
+      },
+      "summary": {
+        "productLine": "You are going to create an update on product",
+        "nameLine": "It will be named",
+        "linkedVersionLine": "And will have as linked version",
+        "appliedVersionsLine": "And will be applied on versions",
+        "descriptionLine": "The defined description are",
+        "statusLine": "Its status will remain PENDING until the end of the associated file upload"
+      }
+    }
+  },
+  "upload": {
+    "title": "File upload",
+    "help": {
+      "new.upload": "You will upload a new file for the update {{updateName}}",
+      "update.upload": "You are about to replace the {{updateFileName}} update file of the update {{updateName}}"
+    },
+    "file": "Upload a file",
+    "file.edit": "Modify the update file",
+    "file.delete": "Delete the update file",
+    "file.new": "Upload a new file",
+    "file.profiles": "Profiles",
+    "file.name": "File name",
+    "hash": {
+      "please.write": "Please enter the update hash",
+      "please.select": "Or select a file containing this hash",
+      "type.please.select": "Please select the hash type"
+    },
+    "please.select": "Please select an update file",
+    "uncompressedsize.write": "Please enter the size of the update in bytes once uncompressed (optional)",
+    "profiles.please.select": "Please select one or more profiles",
+    "file.select.hash": "Select a hash file",
+    "file.select": "Select an update file",
+    "progress": "Upload progress",
+    "file.size": "File size: ",
+    "size": "size",
+    "uncompressed": "uncompressed",
+    "checksum": "checksum",
+    "checksumtype": "checksum type",
+    "remaining.time": "Remaining time: ",
+    "speed": "Speed: ",
+    "goto.product": "Return to product",
+    "status": {
+      "added": "Added",
+      "paused": "Paused",
+      "cancelled": "Cancelled",
+      "uploading": "Uploading",
+      "checksum.server": "Checksum verification",
+      "complete": "Complete",
+      "error": "Error"
+    },
+    "pending": "The update file is being processed, please wait."
+  },
+  "group": {
+    "name": "Group name",
+    "comment": "Group comment",
+    "rights": "Rights",
+    "add.products": "Add products",
+    "add.users": "Add users",
+    "please.select": "Please select a group"
+  },
+  "user": {
+    "name": "User name",
+    "login": "Login",
+    "email": "Email",
+    "your_email": "Your email",
+    "first_name": "First name",
+    "your_first_name": "Your first name",
+    "last_name": "Last name",
+    "your_last_name": "Your last name",
+    "activated": "Activated",
+    "locked": "Locked",
+    "authorities": "Authorities",
+    "add.group": "Add groups",
+    "please.select": "Please select an user",
+    "message": {
+      "first_name.required": "Your first name is required",
+      "last_name.required": "Your last name is required",
+      "email.required": "Your email is required",
+      "lang.required": "Lang is required",
+      "success": {
+        "profile.saved": "Settings saved!"
+      },
+      "error": {
+        "profile.saved": "An error occured while saving the settings!"
+      }
+    }
+  },
+  "lang": {
+    "add": "Add lang"
+  },
+  "statistic": {
+    "tab": {
+      "state": "Park state",
+      "requests": "Requests"
+    },
+    "graph": {
+      "request": {
+        "dateAxis": "Date",
+        "requestAxis": "Number of requests"
+      }
+    },
+    "filter": {
+      "atDate": "Filter by date",
+      "rangeDate": "Select from & to dates",
+      "os": "Filter by OS",
+      "arch": "Filter by architecture",
+      "lang": "Filter by lang",
+      "version": "Filter by version",
+      "status": "Filter by status",
+      "state": "Filter by state"
+    },
+    "help": {
+      "atDate": "The graphic will represent data at this date. Today by default",
+      "rangeDate": "The graphic will represent data between 'from date' and the 'to date' (excluded)",
+      "os": "The graphic will be filtered by OS",
+      "arch": "The graphic will be filtered by architecture",
+      "lang": "The graphic will be filtered by lang",
+      "version": "The graphic will be filtered by version",
+      "status": "The graphic will be filtered by status",
+      "state": "The graphic will be filtered by state"
+    },
+    "export": "Export to XLSX"
+  },
+  "modal": {
+    "select.item": "Item(s) selection",
+    "create.group": "Group creation",
+    "confirm": "Confirm",
+    "delete.confirm": "Are you sure you want to delete {{value}} ?",
+    "cancel.update.creation": "Are you sure you want to cancel the update creation ?",
+    "update.state.confirm": "Are you sure you want to update the status to {{value}} ?",
+    "update.state.suspend": "Are you sure you want suspend this update?",
+    "upload.check": "Are you sure you want to upload another file for this update ?",
+    "upload.cancel": "Are you sure you want to cancel the upload of {{value}} ?",
+    "upload.delete": "Are you sure you want to delete the upload file '{{value}}'"
+  },
+  "table": {
+    "filter": "Filter by: {{columns}}",
+    "filter.all": "Filter"
+  },
+  "warning": {
+    "upload": {
+      "update": {
+        "present": "An associated file is already present for this update. This file will be deleted if any other file is uploaded",
+        "status.published": "The current update is in <strong>PUBLISHED</string> state. <strong>THE UPDATE STATUS WILL BE UNPUBLISHED AFTER ANOTHER UPLOAD</strong>"
+      }
+    },
+    "update.file.no.default": "None of file has 'DEFAULT' as profile"
+  },
+  "error": {
+    "user.login.used": "Login already used",
+    "user.email.used": "Email already used",
+    "user.notfound": "User not found",
+    "group.name.empty": "Group name cannot be empty",
+    "renew.user.activated": "User already activated",
+    "version.update.exist": "The version is linked to an update. Please delete if before deleting the version",
+    "image.large": "The image's size is too large. Please select an image with a size lower than 64kb",
+    "linked_version.already_used": "The linked version is already used by the update {{value}}",
+    "applied_version.same": "The linked version should not be in applied version list ({{value}})",
+    "profile.already_used": "The profile {{profile}} used in update file '{{fromUpdateFile}}' is already used in update file '{{toUpdateFile}}'",
+    "upload": "An error occured after upload, please retry. If the problem persists, contact your administrator",
+    "upload.checksum": "The checksum validation failed. Please retry the upload.<br/>If the problem persists, contact your administrator",
+    "upload.checksum.file.size": "The file size containing the checksum is too large (>1ko)"
+  },
+  "success": {
+    "user": {
+      "created": "User created",
+      "updated": "User updated",
+      "deleted": "User deleted"
+    },
+    "group": {
+      "created": "Group created",
+      "updated": "Group updated",
+      "deleted": "Group deleted"
+    },
+    "product": {
+      "updated": "Product updated",
+      "created": "Produit created. Please consider adding it to at least one group"
+    },
+    "version": {
+      "created": "Version created",
+      "updated": "Version updated",
+      "deleted": "Version deleted"
+    },
+    "update": {
+      "created": "Update created",
+      "updated": "Update updated",
+      "deleted": "Update deleted",
+      "file.deleted": "Update file deleted"
+    },
+    "upload": "The upload is now complete.<br/>The status of the update will change to 'Unpublished' after the end of the file processing."
+  }
+}

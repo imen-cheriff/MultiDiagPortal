@@ -1,0 +1,545 @@
+// Variables
+$primary-green: #4caf50;
+$primary-green-dark: #388e3c;
+$primary-green-light: #a5d6a7;
+$accent-color: #2196f3;
+$dark-gray: #333333;
+$medium-gray: #666666;
+$light-gray: #f5f5f5;
+$white: #ffffff;
+$black: #000000;
+$border-radius: 12px;
+$box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+$transition: all 0.3s ease;
+
+.container {
+  display: flex;
+  gap: 20px;
+  height: calc(100vh - 55px);
+  padding: 20px;
+  background-color: #e3e3e3;
+  max-width: 200vw;
+
+  @media (max-width: 768px) {
+    flex-direction: column;
+    height: auto;
+  }
+}
+
+// Common styles
+h2 {
+  color: $dark-gray;
+  font-size: 1.6rem;
+  margin-bottom: 20px;
+  font-weight: 600;
+  border-bottom: 1px solid $primary-green;
+  padding-bottom: 10px;
+  letter-spacing: 0.5px;
+}
+
+.spinner-container {
+  display: flex;
+  justify-content: center;
+  padding: 40px 0;
+
+  ::ng-deep .mat-spinner circle {
+    stroke: $primary-green !important;
+  }
+}
+
+.error-message {
+  color: #d32f2f;
+  background-color: #ffebee;
+  padding: 16px;
+  border-radius: $border-radius;
+  margin: 16px 0;
+  box-shadow: 0 2px 8px rgba(211, 47, 47, 0.1);
+}
+
+.empty-state {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 200px;
+  background-color: $white;
+  border-radius: $border-radius;
+  color: $medium-gray;
+  font-style: italic;
+  box-shadow: $box-shadow;
+  font-size: 1.1rem;
+}
+
+// Carto list styles
+.carto-list {
+  flex: 1;
+  background-color: $white;
+  border-radius: $border-radius;
+  padding: 20px;
+  box-shadow: $box-shadow;
+}
+
+.carto-items {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-top: 24px;
+  overflow-y: auto;
+  max-height: 90%;
+
+  &::-webkit-scrollbar {
+    width: 7px;
+  }
+
+  &::-webkit-scrollbar-thumb {
+    background-color:  #abc6a5;
+    border-radius: 4px;
+  }
+
+  &::-webkit-scrollbar-thumb:hover {
+    background-color: #90b189;
+  }
+}
+
+.carto-item {
+  display: flex;
+  justify-content: space-between;
+  padding: 16px;
+  border-radius: 8px;
+  border-left: 5px solid transparent;
+  transition: $transition;
+  cursor: pointer;
+  background-color: #f9f9f9;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
+  margin-bottom: 8px;
+  width: 99%;
+
+  &:hover {
+    background-color: #f0f7f0;
+    transform: translateY(-2px);
+  }
+
+  &.selected {
+    background-color: #e8f5e9;
+    border-left: 5px solid $primary-green;
+    box-shadow: 0 4px 8px rgba(76, 175, 80, 0.15);
+  }
+}
+
+.carto-info {
+  display: flex;
+  align-items: center;
+  width: 100%;
+  color: $dark-gray;
+}
+
+.carto-icon {
+  margin-right: 12px;
+  font-size: 18px;
+  color: $primary-green;
+  display: flex;
+  align-items: center;
+}
+
+.carto-name {
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  font-weight: 600;
+  color: $dark-gray;
+  font-size: 1.2rem;
+  flex: 1;
+}
+
+// Carto details styles
+.carto-details {
+  flex: 2;
+  background-color: $white;
+  border-radius: $border-radius;
+  padding: 20px;
+  box-shadow: $box-shadow;
+  overflow-y: auto;
+  max-height: 100%;
+  margin-bottom: -50px;
+
+  &::-webkit-scrollbar {
+    width: 7px;
+  }
+
+  &::-webkit-scrollbar-thumb {
+    background-color:  #abc6a5;
+    border-radius: 4px;
+  }
+
+  &::-webkit-scrollbar-thumb:hover {
+    background-color: #90b189;
+  }
+
+  &::-webkit-scrollbar-track {
+    background-color: #fff;
+  }
+}
+
+.empty-details {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 300px;
+  background-color: #f0f7f0;
+  border-radius: $border-radius;
+  color: $medium-gray;
+  font-style: italic;
+  font-size: 1.1rem;
+  box-shadow: inset 0 0 8px rgba(0, 0, 0, 0.05);
+}
+
+.details-card {
+  border-radius: 10px;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.06);
+  // background-color: #e6e5e5;
+  margin-top: -20px;
+
+  ::ng-deep .mat-card-header {
+    margin-bottom: 20px;
+  }
+
+  ::ng-deep .mat-card-title {
+    color: $dark-gray;
+    font-size: 1.5rem;
+    font-weight: 600;
+    letter-spacing: 0.5px;
+  }
+
+  ::ng-deep .mat-card-content {
+    color: $dark-gray;
+  }
+}
+
+.detail-item {
+  margin-bottom: 16px;
+  padding-bottom: 16px;
+  border-bottom: 1px solid #e0e0e0;
+
+  strong {
+    color: $medium-gray;
+    margin-right: 10px;
+    font-weight: 600;
+  }
+}
+
+.carto-full-details {
+  margin-top: 20px;
+  background-color: #f5f5f5;
+  padding: 20px;
+  border-radius: $border-radius;
+  overflow-x: auto;
+
+  pre {
+    margin: 0;
+    white-space: pre-wrap;
+    font-family: 'Consolas', 'Monaco', monospace;
+    font-size: 0.9rem;
+    line-height: 1.5;
+  }
+}
+
+::ng-deep .mat-card-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 16px;
+  padding: 16px 0 0 0 !important;
+  margin: 20px 0 0 0 !important;
+  border-top: 1px solid #e0e0e0;
+
+  .mat-button {
+    font-weight: 500;
+    padding: 8px 20px;
+    border-radius: 6px;
+    transition: $transition;
+
+    &[color="primary"] {
+      background-color: rgba($primary-green, 0.1);
+      color: $primary-green;
+
+      &:hover {
+        background-color: rgba($primary-green, 0.2);
+      }
+    }
+
+    &[color="warn"] {
+      background-color: rgba(#f44336, 0.1);
+
+      &:hover {
+        background-color: rgba(#f44336, 0.2);
+      }
+    }
+
+    .mat-icon {
+      margin-right: 6px;
+    }
+  }
+}
+
+// Add these styles for the detailed tables
+.details-section {
+  margin-bottom: 30px;
+
+  h3 {
+    color: $dark-gray;
+    font-size: 1.3rem;
+    margin-bottom: 16px;
+    font-weight: 600;
+    border-bottom: 2px solid $primary-green;
+    padding-bottom: 10px;
+    letter-spacing: 0.3px;
+  }
+
+  h4 {
+    color: $dark-gray;
+    font-size: 1.2rem;
+    margin: 20px 0 16px;
+    font-weight: 500;
+    color: $primary-green-dark;
+  }
+}
+
+/* Main table styles */
+.details-table {
+  width: 100%;
+  border-collapse: separate;
+  border-spacing: 0;
+  margin-top: 16px;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  border-radius: 8px;
+  overflow: hidden;
+  box-shadow: 0 5px 20px rgba(0, 0, 0, 0.2);
+
+  th, td {
+    padding: 14px 18px;
+    text-align: left;
+    border: none;
+    border-bottom: 1px solid #e0e0e0;
+    border-right: 1px solid #e0e0e0;
+  }
+
+  th {
+    // background-color: #f1f8e9;
+    background-color: #e1f2e2;
+    font-weight: 600;
+    color: #2e7d32;
+    letter-spacing: 0.5px;
+    font-size: 0.95rem;
+    text-transform: uppercase;
+  }
+
+  td {
+    background-color: #fff;
+    color: #555;
+    font-size: 0.95rem;
+    line-height: 1.5;
+  }
+
+  tr:last-child td,
+  tr:last-child th {
+    border-bottom: none;
+  }
+
+  tr:hover td {
+    background-color: #f5f5f5;
+  }
+
+  tr:nth-child(even) td {
+    background-color: #fafafa;
+  }
+}
+
+/* Nested table styles */
+.nested-table {
+  width: 100%;
+  border-collapse: separate;
+  border-spacing: 0;
+  margin-top: 10px;
+  border-radius: 6px;
+  overflow: hidden;
+  // box-shadow: 0 1px 6px rgba(0, 0, 0, 0.03);
+  box-shadow: 0 5px 20px rgba(0, 0, 0, 0.2);
+
+  th, td {
+    padding: 12px 16px;
+    text-align: left;
+    border: none;
+    border-bottom: 1px solid #e0e0e0;
+    border-right: 1px solid #e0e0e0;
+  }
+
+  th {
+    background-color: #e1f2e2;
+    font-weight: 600;
+    color: #388e3c;
+    font-size: 0.9rem;
+  }
+
+  td {
+    background-color: #fff;
+    color: #666;
+    font-size: 0.9rem;
+  }
+
+  tr:last-child td,
+  tr:last-child th {
+    border-bottom: none;
+  }
+
+  tr:hover td {
+    background-color: #f9f9f9;
+  }
+
+  ul {
+    margin: 0;
+    padding-left: 20px;
+    list-style-type: none;
+
+    li {
+      margin-bottom: 8px;
+      position: relative;
+      
+      &:before {
+        content: "•";
+        color: $primary-green;
+        font-weight: bold;
+        display: inline-block;
+        width: 1em;
+        margin-left: -1em;
+      }
+
+      &:last-child {
+        margin-bottom: 0;
+      }
+
+      strong {
+        color: #555;
+        font-weight: 600;
+        margin-right: 6px;
+      }
+    }
+  }
+}
+
+/* Spinner container */
+.loading-spinner {
+  display: flex;
+  justify-content: center;
+  margin-top: 30px;
+}
+
+/* Error message */
+.error-message {
+  color: #d32f2f;
+  background-color: #ffebee;
+  padding: 16px;
+  border-radius: 8px;
+  margin: 16px 0;
+  font-weight: 500;
+  box-shadow: 0 2px 8px rgba(211, 47, 47, 0.1);
+}
+
+/* Table section headers */
+.details-section h3 {
+  color: #333;
+  font-size: 1.3rem;
+  margin-bottom: 16px;
+  font-weight: 600;
+  padding-bottom: 10px;
+}
+
+/* Responsive design */
+@media (max-width: 768px) {
+  .details-table, .nested-table {
+    font-size: 0.85rem;
+
+    th, td {
+      padding: 10px;
+    }
+  }
+}
+
+.carto-actions {
+  display: flex;
+  gap: 12px;
+  margin-left: auto;
+}
+
+.reject-button {
+  border-radius: 6px;
+  font-size: 12px;
+  font-weight: 600;
+  width: 85px;
+  height: 33px;
+  transition: all 0.3s ease;
+  background-color: #868686;
+  color: #fff;
+  border: none;
+  cursor: pointer;
+  box-shadow: 0 2px 5px rgba(90, 90, 90, 0.2);
+
+  &:hover {
+    background-color: #7c7c7c;
+    color: #fff;
+    // transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(90, 90, 90, 0.3);
+  }
+
+  // &:active {
+  //   background-color: #7c7c7c;
+  //   transform: translateY(0);
+  // }
+
+  &:disabled {
+    background-color: #e0e0e0;
+    color: #aaa;
+    cursor: not-allowed;
+    box-shadow: none;
+  }
+}
+
+.approve-button {
+  border-radius: 6px;
+  font-size: 12px;
+  width: 88px;
+  height: 33px;
+  transition: all 0.3s ease;
+  background-color:  #5f8c56;
+  color: #fff;
+  border: none;
+  cursor: pointer;
+  box-shadow: 0 2px 5px rgba(59, 134, 61, 0.2);
+
+  &:hover {
+    background-color: #587d50;
+    color: #fff;
+    // transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(59, 134, 61, 0.3);
+  }
+
+  // &:active {
+  //   background-color: #587d50;
+  //   transform: translateY(0);
+  // }
+
+  &:disabled {
+    background-color: #e0e0e0;
+    color: #aaa;
+    cursor: not-allowed;
+    box-shadow: none;
+  }
+}
+
+mat-icon {
+  cursor: pointer;
+  color: #ffffff;
+  transition: color 0.3s;
+  font-size: 16px;
+  vertical-align: middle;
+  margin-top: 5px;
+
+  &:hover {
+    color: #ffffff;
+  }
+}

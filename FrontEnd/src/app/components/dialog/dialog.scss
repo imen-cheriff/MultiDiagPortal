@@ -1,0 +1,279 @@
+// Variables for consistent colors
+$primary-green: #5e8c6a;
+$primary-green-light: #6fa87e;
+$primary-green-dark: #5da871;
+$primary-green-hover: #388e3c;
+
+$grey-50: #fafafa;
+$grey-100: #f5f5f5;
+$grey-200: #eeeeee;
+$grey-300: #e0e0e0;
+$grey-400: #bdbdbd;
+$grey-500: #9e9e9e;
+$grey-600: #757575;
+$grey-700: #616161;
+$grey-800: #424242;
+$grey-900: #212121;
+
+$black: #000000;
+$white: #ffffff;
+
+$shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.12), 0 1px 2px rgba(0, 0, 0, 0.24);
+$shadow-md: 0 3px 6px rgba(0, 0, 0, 0.16), 0 3px 6px rgba(0, 0, 0, 0.23);
+$shadow-lg: 0 10px 20px rgba(0, 0, 0, 0.19), 0 6px 6px rgba(0, 0, 0, 0.23);
+
+.dialog-container {
+  padding: 0;
+  min-width: 350px;
+  max-width: 550px;
+  border-radius: 8px;
+  overflow: hidden;
+  background-color: $white;
+  box-shadow: $shadow-lg;
+  
+  // Dialog header
+  h2 {
+    margin: 0;
+    padding: 20px 24px;
+    font-size: 1.25rem;
+    font-weight: 600;
+    color: $white;
+    // background: linear-gradient(135deg, $primary-green, $primary-green-dark);
+    border-bottom: 1px solid $primary-green-dark;
+    letter-spacing: 0.5px;
+    position: relative;
+    
+    &::after {
+      content: '';
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      height: 2px;
+      background: rgba(255, 255, 255, 0.2);
+    }
+  }
+
+  // Dialog content
+  [mat-dialog-content], .form-content {
+    padding: 24px;
+    margin: 0;
+    background-color: $grey-100;
+    color: $grey-800;
+    
+    p {
+      margin: 0 0 16px;
+      font-size: 1rem;
+      line-height: 1.6;
+      color: $grey-800;
+    }
+    
+    .form-field {
+      margin-bottom: 20px;
+      width: 100%;
+
+      label {
+        display: block;
+        margin-bottom: 8px;
+        font-weight: 500;
+        font-size: 0.9rem;
+        color: $grey-700;
+        letter-spacing: 0.3px;
+      }
+
+      input, textarea, select {
+        width: 100%;
+        padding: 12px 16px;
+        border: 1px solid $grey-300;
+        border-radius: 6px;
+        font-size: 1rem;
+        line-height: 1.5;
+        background-color: $white;
+        color: $grey-900;
+        transition: all 0.3s ease;
+
+        &:focus {
+          outline: none;
+          border-color: $primary-green;
+          box-shadow: 0 0 0 3px rgba($primary-green, 0.2);
+        }
+        
+        &::placeholder {
+          color: $grey-500;
+        }
+      }
+      
+      .info-box {
+        padding: 12px 16px;
+        background-color: rgba($primary-green, 0.05);
+        border-left: 4px solid $primary-green;
+        border-radius: 4px;
+        margin-bottom: 20px;
+        
+        .info-label {
+          font-weight: 600;
+          color: $primary-green-dark;
+          margin-right: 8px;
+          display: inline-block;
+        }
+        
+        .info-value {
+          color: $grey-800;
+          font-weight: 500;
+        }
+      }
+
+      .error-message {
+        color: #d32f2f;
+        font-size: 0.8rem;
+        margin-top: 6px;
+        display: flex;
+        align-items: center;
+        
+        &::before {
+          content: "⚠";
+          margin-right: 6px;
+        }
+      }
+    }
+
+    .form-row {
+      display: flex;
+      gap: 20px;
+      margin-bottom: 16px;
+
+      .form-field {
+        flex: 1;
+        margin-bottom: 0;
+      }
+    }
+  }
+
+  // Dialog actions
+  [mat-dialog-actions], .actions {
+    display: flex;
+    justify-content: flex-end;
+    padding: 16px 24px;
+    margin: 0;
+    gap: 12px;
+    background-color: $grey-200;
+    border-top: 1px solid $grey-300;
+
+    button {
+      padding: 10px 20px;
+      border-radius: 6px;
+      font-weight: 500;
+      font-size: 0.9rem;
+      border: none;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      letter-spacing: 0.5px;
+      text-transform: uppercase;
+
+      &.cancel, &:not(.submit):not(.danger) {
+        background-color: $grey-200;
+        color: $grey-800;
+        border: 1px solid $grey-400;
+
+        &:hover {
+          background-color: $grey-300;
+        }
+        
+        &:active {
+          transform: translateY(1px);
+        }
+      }
+
+      &.submit {
+        background-color: $primary-green;
+        color: $white;
+        box-shadow: $shadow-sm;
+
+        &:hover {
+          background-color: $primary-green-hover;
+          box-shadow: $shadow-md;
+        }
+        
+        &:active {
+          transform: translateY(1px);
+          box-shadow: $shadow-sm;
+        }
+
+        &:disabled {
+          background-color: $grey-400;
+          color: $grey-100;
+          box-shadow: none;
+          cursor: not-allowed;
+        }
+      }
+      
+      &.danger {
+        background-color: #d32f2f;
+        color: $white;
+        box-shadow: $shadow-sm;
+
+        &:hover {
+          background-color: #b71c1c;
+          box-shadow: $shadow-md;
+        }
+        
+        &:active {
+          transform: translateY(1px);
+          box-shadow: $shadow-sm;
+        }
+      }
+
+      &:focus {
+        outline: none;
+        box-shadow: 0 0 0 3px rgba($primary-green, 0.3);
+      }
+    }
+  }
+}
+
+// Specific styles for different dialog types
+.brand-dialog {
+  .dialog-container h2 {
+    background: linear-gradient(135deg, $primary-green, darken($primary-green, 10%));
+  }
+}
+
+.car-dialog {
+  .dialog-container h2 {
+    background: linear-gradient(135deg, darken($primary-green, 5%), darken($primary-green, 15%));
+  }
+}
+
+.carto-dialog {
+  .dialog-container h2 {
+    background: linear-gradient(135deg, darken($primary-green, 10%), darken($primary-green, 20%));
+  }
+}
+
+.confirm-dialog {
+  .dialog-container {
+    max-width: 450px;
+    
+    [mat-dialog-content] {
+      display: flex;
+      align-items: center;
+      
+      &::before {
+        content: "⚠";
+        font-size: 2rem;
+        color: #f57c00;
+        margin-right: 16px;
+      }
+    }
+  }
+}
+
+// Animation for dialog appearance
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(-20px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.dialog-container {
+  animation: fadeIn 0.3s ease-out forwards;
+}

@@ -1,0 +1,123 @@
+<div class="users-container">
+  <!-- Header Section -->
+  <div class="header-section">
+    <div class="search-container">
+      <span class="material-icons search-icon">search</span>
+      <input
+        type="text"
+        placeholder="Search by username"
+        [(ngModel)]="searchText"
+        (input)="searchUser()"
+        class="search-input"
+      />
+    </div>
+  </div>
+
+  <!-- Table Section -->
+  <div class="table-section" #tableContainer>
+    <div class="table-wrapper">
+      <table class="users-table">
+        <thead>
+          <tr>
+            <th>Username</th>
+            <!-- <th>Email</th> -->
+            <th>First Name</th>
+            <th>Last Name</th>
+            <th>Role</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr
+            *ngFor="let user of users"
+            (click)="selectUser(user)"
+            [class.selected]="user === selectedUser"
+          >
+            <td>
+              <div class="user-info">
+                <span class="material-icons user-icon">person</span>
+                <span>{{ user.username }}</span>
+              </div>
+            </td>
+            <!-- <td>{{ user.email }}</td> -->
+            <td>{{ user.firstname }}</td>
+            <td>{{ user.lastname }}</td>
+            <td>{{ user.role }}</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- Empty State -->
+    <div class="empty-state" *ngIf="users && users.length === 0">
+      <span class="material-icons">person_off</span>
+      <p>No users found</p>
+      <p class="empty-state-subtitle">Try adjusting your search criteria</p>
+    </div>
+
+    <!-- Loading State -->
+    <div class="loading-state" *ngIf="loading">
+      <div class="spinner"></div>
+      <p>Loading users...</p>
+    </div>
+  </div>
+  
+<!-- Pagination Container -->
+  <div class="pagination-container" *ngIf="totalRecords > pageSize">
+    <div class="pagination-info">
+      <span
+        >{{ getFirstEntryNumber() }} - {{ getLastEntryNumber() }} of
+        {{ totalRecords }}</span
+      >
+    </div>
+
+    <div class="pagination-controls">
+      <button
+        class="pagination-button"
+        [disabled]="currentPage === 1"
+        (click)="onPageChange({ page: 0 })"
+      >
+        <span class="material-icons">first_page</span>
+      </button>
+
+      <button
+        class="pagination-button"
+        [disabled]="currentPage === 1"
+        (click)="onPageChange({ page: currentPage - 2 })"
+      >
+        <span class="material-icons">chevron_left</span>
+      </button>
+
+      <div class="page-numbers">
+        <button
+          *ngFor="let page of visiblePages"
+          class="page-number"
+          [class.active]="page === currentPage"
+          (click)="onPageNumberClick(page)"
+          [disabled]="page === '...'"
+        >
+          {{ page }}
+        </button>
+      </div>
+
+      <button
+        class="pagination-button"
+        [disabled]="currentPage === getTotalPages()"
+        (click)="onPageChange({ page: currentPage })"
+      >
+        <span class="material-icons">chevron_right</span>
+      </button>
+
+      <button
+        class="pagination-button"
+        [disabled]="currentPage === getTotalPages()"
+        (click)="onPageChange({ page: getTotalPages() - 1 })"
+      >
+        <span class="material-icons">last_page</span>
+      </button>
+    </div>
+
+    <div class="pagination-status">
+      <span>Page {{ currentPage }} of {{ getTotalPages() }}</span>
+    </div>
+  </div>
+</div>

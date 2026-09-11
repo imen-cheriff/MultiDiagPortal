@@ -1,0 +1,131 @@
+<div class="profile-container">
+  <!-- Profile Header -->
+  <div class="profile-header">
+    <div class="header-content">
+      <h1>My Profile</h1>
+      <p>Manage your personal information and account settings</p>
+    </div>
+  </div>
+
+  <!-- Alert Messages -->
+  <div *ngIf="successMessage" class="alert alert-success">
+    <span class="material-icons">check_circle</span>
+    <span>{{ successMessage }}</span>
+  </div>
+
+  <div *ngIf="errorMessage" class="alert alert-danger">
+    <span class="material-icons">error</span>
+    <span>{{ errorMessage }}</span>
+  </div>
+
+  <!-- Main Content -->
+  <div class="profile-content">
+    <!-- Profile Card -->
+    <div class="profile-card">
+      <div class="profile-sidebar">
+        <div class="profile-avatar">
+          <div class="avatar-container">
+            <img [src]="profileImage || 'assets/default-avatar.jpg'" alt="Profile Picture">
+            <div class="avatar-overlay" *ngIf="isEditing">
+              <label for="profile-image-upload" class="upload-button">
+                <span class="material-icons">photo_camera</span>
+              </label>
+              <input type="file" id="profile-image-upload" (change)="onFileSelected($event)" accept="image/*">
+            </div>
+          </div>
+          <h2 class="user-name">{{ profileInfo?.user.firstname }} {{ profileInfo?.user.lastname }}</h2>
+          <p class="user-role">{{ profileInfo?.user.role || 'User' }}</p>
+        </div>
+
+        <div class="profile-actions">
+          <button class="action-button" (click)="toggleEditMode()">
+            <span class="material-icons">{{ isEditing ? 'cancel' : 'edit' }}</span>
+            {{ isEditing ? 'Cancel' : 'Edit Profile' }}
+          </button>
+        </div>
+      </div>
+
+      <div class="profile-details">
+        <h3 class="section-title">Personal Information</h3>
+
+        <form [formGroup]="profileForm" (ngSubmit)="saveProfile()" class="profile-form">
+          <div class="form-row">
+            <div class="form-group">
+              <label for="firstName">First Name</label>
+              <div class="input-container">
+                <span class="material-icons">person</span>
+                <input type="text" id="firstName" formControlName="firstname" [readonly]="!isEditing"
+                  [class.readonly]="!isEditing">
+              </div>
+              <div *ngIf="profileForm.get('firstname')?.invalid && profileForm.get('firstname')?.touched"
+                class="error-message">
+                First name is required
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label for="lastName">Last Name</label>
+              <div class="input-container">
+                <span class="material-icons">person</span>
+                <input type="text" id="lastName" formControlName="lastname" [readonly]="!isEditing"
+                  [class.readonly]="!isEditing">
+              </div>
+              <div *ngIf="profileForm.get('lastname')?.invalid && profileForm.get('lastname')?.touched"
+                class="error-message">
+                Last name is required
+              </div>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label for="username">Username</label>
+            <div class="input-container">
+              <span class="material-icons">account_circle</span>
+              <input type="text" id="username" formControlName="username" [readonly]="!isEditing"
+                [class.readonly]="!isEditing">
+            </div>
+            <div *ngIf="profileForm.get('username')?.invalid && profileForm.get('username')?.touched"
+              class="error-message">
+              Username is required
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label for="email">Email Address</label>
+            <div class="input-container">
+              <span class="material-icons">email</span>
+              <input type="email" id="email" formControlName="email" [readonly]="!isEditing"
+                [class.readonly]="!isEditing">
+            </div>
+            <div *ngIf="profileForm.get('email')?.invalid && profileForm.get('email')?.touched" class="error-message">
+              Please enter a valid email address
+            </div>
+          </div>
+
+          <div class="form-actions" *ngIf="isEditing">
+            <button type="submit" class="save-button" [disabled]="profileForm.invalid || isSaving">
+              <span class="material-icons">save</span>
+              {{ isSaving ? 'Saving...' : 'Save Changes' }}
+            </button>
+          </div>
+        </form>
+
+        <div class="account-section">
+          <h3 class="section-title1">Account Security</h3>
+
+          <div class="security-actions">
+            <button class="security-button" (click)="changePassword()">
+              <span class="material-icons">lock</span>
+              Change Password
+            </button>
+
+            <!-- <button class="security-button" (click)="enable2FA()">
+              <span class="material-icons">security</span>
+              Enable Two-Factor Authentication
+            </button> -->
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

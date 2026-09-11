@@ -1,0 +1,206 @@
+<div class="workspace-container">
+  <!-- Main Content Area -->
+  <div class="main-content">
+    <!-- Breadcrumb Navigation -->
+    <div class="breadcrumb-container">
+      <ul class="breadcrumb">
+        <li><a (click)="navigateToBrands()">Brands</a></li>
+        <li *ngIf="selectedBrand">
+          <a (click)="navigateToCars(selectedBrand)">{{ selectedBrand.name }}</a>
+        </li>
+        <li *ngIf="selectedCar">
+          <a (click)="navigateToCartos(selectedCar)">{{ selectedCar.NOMVEH }}</a>
+        </li>
+        <!-- <li *ngIf="selectedCar">
+          <a (click)="navigateToCartos(selectedCarto)">{{ selectedCarto.name }}</a>
+        </li> -->
+      </ul>
+    </div>
+
+    <!-- Search Bar -->
+    <div class="search-wrapper">
+      <div class="search-container">
+        <span class="material-icons search-icon">search</span>
+        <input type="text" [(ngModel)]="searchText" (ngModelChange)="applySearch()" placeholder="Search..."
+          class="search-input" />
+          <!-- <button class="filter-button"  (click)="filterBrandsWithCars()">
+            <span class="material-icons">filter_list</span>
+            <span>Show Brands with Cars</span>
+          </button> -->
+      </div>
+
+    </div>
+
+    <!-- Brands List View -->
+    <div class="entity-container">
+      <div class="entity-header">
+        <h2>Brands</h2>
+        <button 
+        class="refresh-button" 
+        (click)="refreshCurrentView(); disableButtonTemporarily()" 
+        [disabled]="isRefreshing || isButtonDisabled"
+        matTooltip="Refresh data">
+        <mat-icon [class.rotating]="isRefreshing">refresh</mat-icon>
+      </button>
+
+
+      </div>
+
+      <div class="brands-list">
+        <!-- Brand Items -->
+        <div *ngFor="let brand of displayedBrands" class="brand-item" [id]="'brand-' + brand.id"
+          [class.expanded]="isBrandExpanded(brand)"
+          [@expandCollapse]="isBrandExpanded(brand) ? 'expanded' : 'collapsed'"
+          (click)="toggleBrandExpansion(brand, $event)">
+          <!-- Brand Header -->
+          <div class="brand-header">
+            <div class="brand-logo">
+              <img *ngIf="brand.logos && brand.logos[0]" [src]="brand.logos[0]" alt="{{ brand.name }} logo" />
+              <span *ngIf="!brand.logos || !brand.logos[0]" class="material-icons">directions_car</span>
+            </div>
+
+            <div class="brand-name">{{ brand.name }}</div>
+
+            <!-- <div class="brand-actions" *ngIf="isManager || isTL || isAdmin">
+              <button
+                class="action-icon edit"
+                (click)="editBrand(brand, $event)"
+              >
+                <span class="material-icons">edit</span>
+              </button>
+              <button
+                class="action-icon delete"
+                (click)="deleteBrand(brand, $event)"
+              >
+                <span class="material-icons">delete</span>
+              </button>
+            </div> -->
+
+            <div class="expand-icon">
+              <span class="material-icons">{{
+                isBrandExpanded(brand) ? "expand_less" : "expand_more"
+                }}</span>
+            </div>
+          </div>
+
+          <!-- car models list section -->
+          <div class="car-models-list" [class.has-more]="hasMoreCars" [class.show-fade]="hasMoreCars && !isLoadingMore">
+            
+            <div class="search-wrapper">
+              <div class="search-container-cars">
+                <span class="material-icons search-icon">search</span>
+                <input type="text" [(ngModel)]="carSearchText" (ngModelChange)="applyCarSearch()"
+                  placeholder="Search cars..." class="search-input" [disabled]="!isBrandExpanded(brand)"
+                  (click)="$event.stopPropagation()" />
+              </div>
+            </div>
+
+            <div class="entity-header" *ngIf="displayedCars && displayedCars.length > 0">
+              <h3>Models</h3>
+            </div>
+
+            <div *ngFor="let car of displayedCars" class="car-model-item" [class.selected]="
+                selectedCar && selectedCar.CODE_VEH === car.CODE_VEH
+              " (click)="selectCar(car, $event)">
+              <div class="car-model-icon">
+                <span class="material-icons">directions_car</span>
+              </div>
+
+              <div class="car-model-details">
+                <h4>{{ car.NOMVEH }}</h4>
+                <div class="car-model-specs">
+                  <span class="car-year">{{ car.year }}</span>
+                  <span class="car-registration">{{ car.registration }}</span>
+                </div>
+              </div>
+
+              <!-- <div class="car-model-actions" *ngIf="isManager || isTL || isAdmin">
+                <button class="action-icon edit" (click)="editCar(car, $event)">
+                  <span class="material-icons">edit</span>
+                </button>
+                <button
+                  class="action-icon delete"
+                  (click)="deleteCar(car, $event)"
+                >
+                  <span class="material-icons">delete</span>
+                </button>
+              </div> -->
+            </div>
+
+            <!-- Empty state for car models -->
+            <div *ngIf="
+                isBrandExpanded(brand) &&
+                (!displayedCars || displayedCars.length === 0)
+              " class="empty-state">
+              <span class="material-icons">directions_car</span>
+              <p>No models found for this brand</p>
+            </div>
+          </div>
+
+          <!-- Show More Button - Add this after the car-models-list div -->
+          <div class="show-more-container" *ngIf="hasMoreCars">
+            <button class="show-more-button" [class.loading]="isLoadingMore" (click)="loadMoreCars()">
+              <span class="material-icons">
+                {{ isLoadingMore ? "sync" : "expand_more" }}
+              </span>
+              <span>{{ isLoadingMore ? "Loading..." : "Show More" }}</span>
+            </button>
+          </div>
+
+          <!-- Empty state for brands -->
+          <div *ngIf="!displayedBrands || displayedBrands.length === 0" class="empty-state">
+            <span class="material-icons">category</span>
+            <p>No brands found</p>
+            <!-- <button *ngIf="isManager || isTL" class="add-button" (click)="addBrand()">
+            <span class="material-icons">add</span>
+            <span>Add Brand</span>
+          </button> -->
+          </div>
+        </div>
+
+        <!-- Pagination for brands -->
+        <div class="pagination-container" *ngIf="totalBrands > brandsPerPage">
+          <div class="pagination-info">
+            <span>{{ getFirstEntryNumber("brands") }} -
+              {{ getLastEntryNumber("brands") }} of {{ totalBrands }}</span>
+          </div>
+
+          <div class="pagination-controls">
+            <button class="pagination-button" [disabled]="currentBrandPage === 1"
+              [class.disabled]="currentBrandPage === 1" (click)="onBrandPageChange(1)">
+              <span class="material-icons">first_page</span>
+            </button>
+
+            <button class="pagination-button" [disabled]="currentBrandPage === 1"
+              [class.disabled]="currentBrandPage === 1" (click)="onBrandPageChange(currentBrandPage - 1)">
+              <span class="material-icons">chevron_left</span>
+            </button>
+
+            <div class="page-numbers">
+              <button *ngFor="let page of getBrandPages(); let i = index" class="page-number"
+                [class.active]="page === currentBrandPage" (click)="onBrandPageChange(page)">
+                {{ page }}
+              </button>
+            </div>
+
+            <button class="pagination-button" [disabled]="currentBrandPage === getTotalBrandPages()"
+              [class.disabled]="currentBrandPage === getTotalBrandPages()"
+              (click)="onBrandPageChange(currentBrandPage + 1)">
+              <span class="material-icons">chevron_right</span>
+            </button>
+
+            <button class="pagination-button" [disabled]="currentBrandPage === getTotalBrandPages()"
+              [class.disabled]="currentBrandPage === getTotalBrandPages()"
+              (click)="onBrandPageChange(getTotalBrandPages())">
+              <span class="material-icons">last_page</span>
+            </button>
+          </div>
+
+          <div class="pagination-status">
+            <span>Page {{ currentBrandPage }} of {{ getTotalBrandPages() }}</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

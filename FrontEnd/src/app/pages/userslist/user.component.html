@@ -1,0 +1,6 @@
+<div class="d-flex flex-column col card card-z1">
+  <h1>Users</h1>
+  <app-userslist #userTable (userSelected)="onUserSelected($event)"></app-userslist>
+</div>
+<app-user-detail class="d-flex flex-column col card card-z1" [user]="selectedUser" (newClicked)="onNewClicked()"></app-user-detail>
+<!-- (userUpdated)="onUserUpdated()" -->

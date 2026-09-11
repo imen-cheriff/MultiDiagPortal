@@ -1,0 +1,96 @@
+<div class="history-dialog">
+    <h2 mat-dialog-title>Action History</h2>
+    
+    <div mat-dialog-content>
+      <!-- Filters -->
+      <div class="filters-container">
+        <h3>Filters</h3>
+        <div class="filters-row">
+          <mat-form-field appearance="outline" class="date-filter">
+            <mat-label>Start Date</mat-label>
+            <input matInput [matDatepicker]="startPicker" [(ngModel)]="startDate" (dateChange)="applyFilters()">
+            <mat-datepicker-toggle matSuffix [for]="startPicker"></mat-datepicker-toggle>
+            <mat-datepicker #startPicker></mat-datepicker>
+          </mat-form-field>
+          
+          <mat-form-field appearance="outline" class="date-filter">
+            <mat-label>End Date</mat-label>
+            <input matInput [matDatepicker]="endPicker" [(ngModel)]="endDate" (dateChange)="applyFilters()">
+            <mat-datepicker-toggle matSuffix [for]="endPicker"></mat-datepicker-toggle>
+            <mat-datepicker #endPicker></mat-datepicker>
+          </mat-form-field>
+        </div>
+        
+        <div class="filters-row">
+          <mat-form-field appearance="outline">
+            <mat-label>User</mat-label>
+            <mat-select [(ngModel)]="selectedUser" (selectionChange)="applyFilters()">
+              <mat-option [value]="null">All Users</mat-option>
+              <mat-option *ngFor="let user of uniqueUsers" [value]="user">{{ user }}</mat-option>
+            </mat-select>
+          </mat-form-field>
+          
+          <mat-form-field appearance="outline">
+            <mat-label>Action Type</mat-label>
+            <mat-select [(ngModel)]="selectedActionType" (selectionChange)="applyFilters()">
+              <mat-option [value]="null">All Actions</mat-option>
+              <mat-option value="add">Added</mat-option>
+              <mat-option value="modify">Modified</mat-option>
+              <mat-option value="delete">Deleted</mat-option>
+            </mat-select>
+          </mat-form-field>
+          
+          <mat-form-field appearance="outline">
+            <mat-label>Entity Type</mat-label>
+            <mat-select [(ngModel)]="selectedEntityType" (selectionChange)="applyFilters()">
+              <mat-option [value]="null">All Entities</mat-option>
+              <mat-option value="carto">Cartography</mat-option>
+              <mat-option value="family">Family</mat-option>
+              <mat-option value="ecu">ECU</mat-option>
+            </mat-select>
+          </mat-form-field>
+          
+          <button mat-button color="primary" (click)="resetFilters()">
+            <span class="material-icons">refresh</span> Reset Filters
+          </button>
+        </div>
+      </div>
+      
+      <!-- History Timeline -->
+      <div class="history-timeline">
+        <div *ngIf="filteredActions.length === 0" class="no-history">
+          <span class="material-icons">history</span>
+          <p>No history records found with the current filters</p>
+        </div>
+        
+        <div *ngFor="let action of filteredActions" class="history-item">
+          <div class="history-icon">
+            <span class="material-icons" [ngClass]="getActionColor(action.actionType)">
+              {{ getActionIcon(action.actionType) }}
+            </span>
+          </div>
+          
+          <div class="history-content">
+            <div class="history-header">
+              <span class="history-user">{{ action.userName }}</span>
+              <span class="history-time">{{ action.timestamp | date:'medium' }}</span>
+            </div>
+            
+            <div class="history-body">
+              <span class="action-type">{{ getActionTypeLabel(action.actionType) }}</span>
+              <span class="entity-type">{{ getEntityTypeLabel(action.entityType) }}:</span>
+              <span class="entity-name">{{ action.entityName }}</span>
+            </div>
+            
+            <div *ngIf="action.details" class="history-details">
+              {{ action.details }}
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    
+    <div mat-dialog-actions align="end">
+      <button mat-button (click)="closeDialog()">Close</button>
+    </div>
+  </div>

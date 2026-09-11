@@ -1,0 +1,1000 @@
+<form #cartoForm="ngForm">
+  <app-carto-edit-bar *ngIf="isAuthenticated && selectedCarId" [selectedElement]="currentDetail" [readonly]="readonly"
+    [saveDisabled]="!cartoForm.form.valid" [saveTooltip]="
+      cartoForm.form.invalid ? 'Please fill out all required fields correctly': '' " (editClicked)="edit()"
+    (saveClicked)="save()" (cancelClicked)="cancel()" (newClicked)="newCarto()"
+    (deleteClicked)="delete(currentDetail?.id)" (importClicked)="handleImportedFile($event)"
+    (exportClicked)="exportToExcel()" (historyClicked)="navigateToHistory()">
+  </app-carto-edit-bar>
+
+
+  <div *ngIf="!selectedCarId" class="edit-bar"></div>
+
+  <div *ngIf="!currentDetail" class="empty-state">
+    <span class="material-icons">map</span>
+    <p class="status">Select a Vehicule from the list to view details</p>
+  </div>
+
+  <div class="car-detail-container">
+    <!-- Cartography Tabs -->
+    <div style="display: flex; justify-content: center; align-items: center;">
+      <div class="carto-tabs" *ngIf="availableCartos && availableCartos.length > 0">
+        <ul class="nav nav-tabs">
+          <li class="nav-item" *ngFor="let cartoTab of availableCartos">
+            <a class="nav-link" [class.active]="cartoTab.id === carto?.id" href="javascript:void(0)"
+              (click)="selectCartoTab(cartoTab.id)">
+              Carto-{{ cartoTab.name || "Unnamed" }}
+            </a>
+          </li>
+        </ul>
+      </div>
+    </div>
+
+    <div #scrollContainer [style.overflow-y]="!readonly ? 'auto' : 'hidden'"
+      [style.max-height]="!readonly ? '800px' : 'none'" [style.scrollbar-color]="
+        !readonly ? 'rgb(142, 142, 142) transparent' : 'transparent'
+      ">
+      <div *ngIf="!currentDetail; else elseBlock" class="empty-state">
+        <span class="material-icons">map</span>
+        <p class="status">Select a Vehicule from the list to view details</p>
+      </div>
+
+      <ng-template #elseBlock>
+        <div class="car-detail-container">
+          <!-- Cartography Basic Info -->
+          <div class="card">
+            <div class="card-header">
+              <h3 class="card-title">CARTOGRAPHY INFO</h3>
+              <p class="creation-date" *ngIf="currentDetail?.creationDate">
+                Created on:
+                {{ currentDetail?.creationDate | date : "mediumDate" }}
+              </p>
+              <p [ngClass]="{
+                  'approved-status': currentDetail?.status === 'APPROVED',
+                  'pending-status': currentDetail?.status === 'PENDING',
+                  'rejected-status': currentDetail?.status === 'REJECTED'
+                }">
+                <span *ngIf="currentDetail?.status === 'APPROVED'"><span
+                    class="material-icons">check_circle</span></span>
+                <span *ngIf="currentDetail?.status === 'PENDING'"><span
+                    class="material-icons">hourglass_empty</span></span>
+                <span *ngIf="currentDetail?.status === 'REJECTED'"><span class="material-icons">cancel</span></span>
+                {{ currentDetail?.status }}
+              </p>
+            </div>
+
+            <div class="card-body">
+              <div class="excel-table-info">
+                <div class="excel-header-row-info">
+                  <div class="excel-header-cell-info">Carto Name</div>
+                  <div class="excel-header-cell-info">Tool</div>
+                  <div class="excel-header-cell-info">Version</div>
+                </div>
+                <div class="excel-row">
+                  <div class="excel-cell-info">
+                    <span *ngIf="readonly">
+                      <span *ngIf="currentDetail.name?.length > 0; else noName">Carto-{{ currentDetail.name }}</span>
+                    </span>
+                    <ng-template #noName>
+                      <span class="empty-models">Carto-Unamed</span>
+                    </ng-template>
+                    <input *ngIf="!readonly" type="text" class="excel-input-info"
+                      [value]="'Carto-' + currentDetail.name" (input)="updateName($event)" name="name" required />
+                  </div>
+                  <div class="excel-cell-info">
+                    <span *ngIf="readonly">
+                      <span *ngIf="currentDetail.outil?.length > 0; else noOutil">{{ currentDetail.outil }}</span>
+                    </span>
+                    <ng-template #noOutil>
+                      <span class="empty-models">No tool available</span>
+                    </ng-template>
+                    <input *ngIf="!readonly" type="text" class="excel-input-info" [(ngModel)]="currentDetail.outil"
+                      name="outil" />
+                  </div>
+                  <div class="excel-cell-info">
+                    <span *ngIf="readonly">
+                      <span *ngIf="
+                          currentDetail.version?.length > 0;
+                          else noVersion
+                        ">{{ currentDetail.version }}</span>
+                    </span>
+                    <ng-template #noVersion>
+                      <span class="empty-models">No version available</span>
+                    </ng-template>
+                    <input *ngIf="!readonly" type="text" class="excel-input-info" [(ngModel)]="currentDetail.version"
+                      name="version" />
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- ecus Section -->
+            <div class="card">
+              <div class="card-header">
+                <h3 class="card-title">Details</h3>
+                <div class="count-info">
+                  <span>{{ currentDetail.families?.length || 0 }} Families
+                  </span>
+                  | <span>{{ getTotalECUs() }} ECUs </span>
+                </div>
+                <div class="action-buttons" *ngIf="!readonly">
+                  <div *ngIf="
+                      currentDetail.families &&
+                      currentDetail.families.length > 0
+                    ">
+                    <button type="button" class="button-column" (click)="toggleColumnSelectionMode()"
+                      *ngIf="!columnSelectionMode">
+                      Columns Sekection
+                    </button>
+                  </div>
+                  <button type="button" class="add-button-fam" (click)="addRowWithSelectedColumns()">
+                    <span class="material-icons">add</span>
+                    <span>Add</span>
+                  </button>
+                </div>
+              </div>
+
+              <div class="card-body">
+                <!-- Empty state when no ecuS exist -->
+                <div *ngIf="
+                    !currentDetail.families ||
+                    currentDetail.families?.length === 0
+                  " class="empty-details">
+                  <p *ngIf="readonly">No Details available</p>
+                  <p *ngIf="!readonly">
+                    Click "Add" to add a new Families & Ecus
+                  </p>
+                </div>
+
+                <!-- Main Excel Table for all ecus -->
+                <div *ngIf="
+                    currentDetail.families && currentDetail.families.length > 0
+                  ">
+                  <!-- Add Row Button -->
+                  <div class="actions-container" *ngIf="!readonly">
+                    <!-- Column Selector Panel -->
+                    <div class="column-selector-panel" *ngIf="columnSelectionMode">
+                      <div class="column-selector-header">
+                        <h3>Select Columns to Display</h3>
+                        <!-- <button type="button" class="close-button" (click)="toggleColumnSelectionMode()">
+                          <span class="material-icons">close</span>
+                        </button> -->
+                      </div>
+
+                      <div class="column-selector-body">
+                        <div class="column-options">
+                          <label *ngFor="let column of availableColumns" class="column-option">
+                            <input type="checkbox" [checked]="column.selected"
+                              [disabled]="column.required && column.selected"
+                              (change)="toggleColumnSelection(column)" />
+                            {{ column.label }}
+                            <span *ngIf="column.required" class="required-indicator">*</span>
+                          </label>
+                        </div>
+                      </div>
+
+                      <div class="column-selector-footer">
+                        <button type="button" class="cancel-button" (click)="
+                            resetColumnSelection(); toggleColumnSelectionMode()
+                          ">
+                          Cancel
+                        </button>
+                        <button type="button" class="apply-button" (click)="toggleColumnSelectionMode()">
+                          Done
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <div *ngIf="
+                    currentDetail.families && currentDetail.families.length > 0
+                  " class="table-container">
+                  <div class="excel-table">
+                    <!-- Header Row -->
+                    <div class="excel-header-row">
+                      <!-- Family header -->
+                      <div class="excel-header-cell" *ngIf="getColumnByField('famille')?.selected">
+                        <span>Family</span>
+                        <div class="filter-container">
+                          <button class="filter-button" (click)="toggleFilter('famille', $event)">
+                            <!-- [hidden]="!readonly" -->
+                            <span class="material-icons">filter_list</span>
+                          </button>
+
+                          <div *ngIf="activeFilters['famille']" class="filter-popup">
+                            <div class="filter-popup-content">
+                              <div class="filter-search">
+                                <input type="text" placeholder="Search..." [(ngModel)]="filters['famille'].searchTerm"
+                                  (input)="applyFilter('famille')" />
+                              </div>
+                              <div class="filter-options">
+                                <label *ngFor="
+                                    let option of filters['famille'].options
+                                  " class="filter-option">
+                                  <input type="checkbox" [checked]="option.selected" (change)="
+                                      toggleFilterOption('famille', option)
+                                    " />
+                                  {{ option.value }}
+                                </label>
+                              </div>
+
+                              <div class="filter-actions">
+                                <button type="button" (click)="clearFilter('famille')">
+                                  Clear
+                                </button>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+
+                      <!-- Motorisation header -->
+                      <div class="excel-header-cell" *ngIf="getColumnByField('motorisation')?.selected">
+                        <span>Motorisation</span>
+                        <div class="filter-container">
+                          <button class="filter-button" (click)="toggleFilter('motorisation', $event)">
+                            <span class="material-icons">filter_list</span>
+                          </button>
+
+                          <div *ngIf="activeFilters['motorisation']" class="filter-popup">
+                            <div class="filter-popup-content">
+                              <div class="filter-search">
+                                <input type="text" placeholder="Search..." [(ngModel)]="
+                                    filters['motorisation'].searchTerm
+                                  " (input)="applyFilter('motorisation')" />
+                              </div>
+                              <div class="filter-options">
+                                <label *ngFor="
+                                    let option of filters['motorisation']
+                                      .options
+                                  " class="filter-option">
+                                  <input type="checkbox" [checked]="option.selected" (change)="
+                                      toggleFilterOption('motorisation', option)
+                                    " />
+                                  {{ option.value }}
+                                </label>
+                              </div>
+
+                              <div class="filter-actions">
+                                <button type="button" (click)="clearFilter('motorisation')">
+                                  Clear
+                                </button>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+
+                      <!-- Type header -->
+                      <div class="excel-header-cell" *ngIf="getColumnByField('type')?.selected">
+                        <span>Type</span>
+                        <div class="filter-container">
+                          <button class="filter-button" (click)="toggleFilter('type', $event)">
+                            <span class="material-icons">filter_list</span>
+                          </button>
+
+                          <div *ngIf="activeFilters['type']" class="filter-popup">
+                            <div class="filter-popup-content">
+                              <div class="filter-search">
+                                <input type="text" placeholder="Search..." [(ngModel)]="filters['type'].searchTerm"
+                                  (input)="applyFilter('type')" />
+                              </div>
+                              <div class="filter-options">
+                                <label *ngFor="let option of filters['type'].options" class="filter-option">
+                                  <input type="checkbox" [checked]="option.selected" (change)="
+                                      toggleFilterOption('type', option)
+                                    " />
+                                  {{ option.value }}
+                                </label>
+                              </div>
+
+                              <div class="filter-actions">
+                                <button type="button" (click)="clearFilter('type')">
+                                  Clear
+                                </button>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+
+                      <!-- ECU header -->
+                      <div class="excel-header-cell" *ngIf="getColumnByField('ecu')?.selected">
+                        <span>ECU</span>
+                        <div class="filter-container">
+                          <button class="filter-button" (click)="toggleFilter('ecu', $event)">
+                            <span class="material-icons">filter_list</span>
+                          </button>
+
+                          <div *ngIf="activeFilters['ecu']" class="filter-popup">
+                            <div class="filter-popup-content">
+                              <div class="filter-search">
+                                <input type="text" placeholder="Search..." [(ngModel)]="filters['ecu'].searchTerm"
+                                  (input)="applyFilter('ecu')" />
+                              </div>
+                              <div class="filter-options">
+                                <label *ngFor="let option of filters['ecu'].options" class="filter-option">
+                                  <input type="checkbox" [checked]="option.selected"
+                                    (change)="toggleFilterOption('ecu', option)" />
+                                  {{ option.value }}
+                                </label>
+                              </div>
+
+                              <div class="filter-actions">
+                                <button type="button" (click)="clearFilter('ecu')">
+                                  Clear
+                                </button>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+
+                      <!-- Reco header -->
+                      <div class="excel-header-cell" *ngIf="getColumnByField('reco')?.selected">
+                        <span>Reco</span>
+                        <div class="filter-container">
+                          <button class="filter-button" (click)="toggleFilter('reco', $event)">
+                            <span class="material-icons">filter_list</span>
+                          </button>
+
+                          <div *ngIf="activeFilters['reco']" class="filter-popup">
+                            <div class="filter-popup-content">
+                              <div class="filter-search">
+                                <input type="text" placeholder="Search..." [(ngModel)]="filters['reco'].searchTerm"
+                                  (input)="applyFilter('reco')" />
+                              </div>
+                              <div class="filter-options">
+                                <label *ngFor="let option of filters['reco'].options" class="filter-option">
+                                  <input type="checkbox" [checked]="option.selected" (change)="
+                                      toggleFilterOption('reco', option)
+                                    " />
+                                  {{ option.value }}
+                                </label>
+                              </div>
+
+                              <div class="filter-actions">
+                                <button type="button" (click)="clearFilter('reco')">
+                                  Clear
+                                </button>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+
+                      <!-- Perimetre header -->
+                      <div class="excel-header-cell" *ngIf="getColumnByField('perimetre')?.selected">
+                        <span>Perimetre</span>
+                        <div class="filter-container">
+                          <button class="filter-button" (click)="toggleFilter('perimetre', $event)">
+                            <span class="material-icons">filter_list</span>
+                          </button>
+
+                          <div *ngIf="activeFilters['perimetre']" class="filter-popup">
+                            <div class="filter-popup-content">
+                              <div class="filter-search">
+                                <input type="text" placeholder="Search..." [(ngModel)]="filters['perimetre'].searchTerm"
+                                  (input)="applyFilter('perimetre')" />
+                              </div>
+                              <div class="filter-options">
+                                <label *ngFor="
+                                    let option of filters['perimetre'].options
+                                  " class="filter-option">
+                                  <input type="checkbox" [checked]="option.selected" (change)="
+                                      toggleFilterOption('perimetre', option)
+                                    " />
+                                  {{ option.value }}
+                                </label>
+                              </div>
+
+                              <div class="filter-actions">
+                                <button type="button" (click)="clearFilter('perimetre')">
+                                  Clear
+                                </button>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+
+                      <!-- Mpm header -->
+                      <div class="excel-header-cell" *ngIf="getColumnByField('mpm')?.selected">
+                        <span>MPM</span>
+                        <div class="filter-container">
+                          <button class="filter-button" (click)="toggleFilter('mpm', $event)">
+                            <span class="material-icons">filter_list</span>
+                          </button>
+
+                          <div *ngIf="activeFilters['mpm']" class="filter-popup">
+                            <div class="filter-popup-content">
+                              <div class="filter-search">
+                                <input type="text" placeholder="Search..." [(ngModel)]="filters['mpm'].searchTerm"
+                                  (input)="applyFilter('mpm')" />
+                              </div>
+                              <div class="filter-options">
+                                <label *ngFor="let option of filters['mpm'].options" class="filter-option">
+                                  <input type="checkbox" [checked]="option.selected"
+                                    (change)="toggleFilterOption('mpm', option)" />
+                                  {{ option.value }}
+                                </label>
+                              </div>
+
+                              <div class="filter-actions">
+                                <button type="button" (click)="clearFilter('mpm')">
+                                  Clear
+                                </button>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+
+                      <!-- Ident header -->
+                      <div class="excel-header-cell" *ngIf="getColumnByField('ident')?.selected">
+                        <span>Ident</span>
+                        <div class="filter-container">
+                          <button class="filter-button" (click)="toggleFilter('ident', $event)">
+                            <span class="material-icons">filter_list</span>
+                          </button>
+
+                          <div *ngIf="activeFilters['ident']" class="filter-popup">
+                            <div class="filter-popup-content">
+                              <div class="filter-search">
+                                <input type="text" placeholder="Search..." [(ngModel)]="filters['ident'].searchTerm"
+                                  (input)="applyFilter('ident')" [name]="'filterIdent'" />
+                              </div>
+                              <div class="filter-options">
+                                <label *ngFor="
+                                    let option of filters['ident'].options
+                                  " class="filter-option">
+                                  <input type="checkbox" [checked]="option.selected" (change)="
+                                      toggleFilterOption('ident', option)
+                                    " />
+                                  {{ option.value }}
+                                </label>
+                              </div>
+
+                              <div class="filter-actions">
+                                <button type="button" (click)="clearFilter('ident')">
+                                  Clear
+                                </button>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+
+                      <!-- Test Actionneur header -->
+                      <div class="excel-header-cell" *ngIf="getColumnByField('ta')?.selected">
+                        <span>TA</span>
+                        <div class="filter-container">
+                          <button class="filter-button" (click)="toggleFilter('ta', $event)">
+                            <span class="material-icons">filter_list</span>
+                          </button>
+
+                          <div *ngIf="activeFilters['ta']" class="filter-popup">
+                            <div class="filter-popup-content">
+                              <div class="filter-search">
+                                <input type="text" placeholder="Search..." [(ngModel)]="filters['ta'].searchTerm"
+                                  (input)="applyFilter('ta')" />
+                              </div>
+                              <div class="filter-options">
+                                <label *ngFor="let option of filters['ta'].options" class="filter-option">
+                                  <input type="checkbox" [checked]="option.selected"
+                                    (change)="toggleFilterOption('ta', option)" />
+                                  {{ option.value }}
+                                </label>
+                              </div>
+
+                              <div class="filter-actions">
+                                <button type="button" (click)="clearFilter('ta')">
+                                  Clear
+                                </button>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+
+                      <!-- Fonction Avancées header -->
+                      <div class="excel-header-cell" *ngIf="getColumnByField('fa')?.selected">
+                        <span>FA</span>
+                        <div class="filter-container">
+                          <button class="filter-button" (click)="toggleFilter('fa', $event)">
+                            <span class="material-icons">filter_list</span>
+                          </button>
+
+                          <div *ngIf="activeFilters['fa']" class="filter-popup">
+                            <div class="filter-popup-content">
+                              <div class="filter-search">
+                                <input type="text" placeholder="Search..." [(ngModel)]="filters['fa'].searchTerm"
+                                  (input)="applyFilter('fa')" />
+                              </div>
+                              <div class="filter-options">
+                                <label *ngFor="let option of filters['fa'].options" class="filter-option">
+                                  <input type="checkbox" [checked]="option.selected"
+                                    (change)="toggleFilterOption('fa', option)" />
+                                  {{ option.value }}
+                                </label>
+                              </div>
+
+                              <div class="filter-actions">
+                                <button type="button" (click)="clearFilter('fa')">
+                                  Clear
+                                </button>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+
+                      <!-- Protocol header -->
+                      <div class="excel-header-cell" *ngIf="getColumnByField('protocol')?.selected">
+                        <span>Protocol</span>
+                        <div class="filter-container">
+                          <button class="filter-button" (click)="toggleFilter('protocol', $event)">
+                            <span class="material-icons">filter_list</span>
+                          </button>
+
+                          <div *ngIf="activeFilters['protocol']" class="filter-popup">
+                            <div class="filter-popup-content">
+                              <div class="filter-search">
+                                <input type="text" placeholder="Search..." [(ngModel)]="filters['protocol'].searchTerm"
+                                  (input)="applyFilter('protocol')" />
+                              </div>
+                              <div class="filter-options">
+                                <label *ngFor="
+                                    let option of filters['protocol'].options
+                                  " class="filter-option">
+                                  <input type="checkbox" [checked]="option.selected" (change)="
+                                      toggleFilterOption('protocol', option)
+                                    " />
+                                  {{ option.value }}
+                                </label>
+                              </div>
+
+                              <div class="filter-actions">
+                                <button type="button" (click)="clearFilter('protocol')">
+                                  Clear
+                                </button>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+
+                      <!-- Developpeur header -->
+                      <div class="excel-header-cell" *ngIf="getColumnByField('respDev')?.selected">
+                        <span>Developper</span>
+                        <div class="filter-container">
+                          <button class="filter-button" (click)="toggleFilter('respDev', $event)">
+                            <span class="material-icons">filter_list</span>
+                          </button>
+
+                          <div *ngIf="activeFilters['respDev']" class="filter-popup">
+                            <div class="filter-popup-content">
+                              <div class="filter-search">
+                                <input type="text" placeholder="Search..." [(ngModel)]="filters['respDev'].searchTerm"
+                                  (input)="applyFilter('respDev')" />
+                              </div>
+                              <div class="filter-options">
+                                <label *ngFor="
+                                    let option of filters['respDev'].options
+                                  " class="filter-option">
+                                  <input type="checkbox" [checked]="option.selected" (change)="
+                                      toggleFilterOption('respDev', option)
+                                    " />
+                                  {{ option.value }}
+                                </label>
+                              </div>
+
+                              <div class="filter-actions">
+                                <button type="button" (click)="clearFilter('respDev')">
+                                  Clear
+                                </button>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+
+                      <!-- Accés De Sécurité header -->
+                      <div class="excel-header-cell" *ngIf="getColumnByField('sa')?.selected">
+                        <span>SA</span>
+                        <div class="filter-container">
+                          <button class="filter-button" (click)="toggleFilter('sa', $event)">
+                            <span class="material-icons">filter_list</span>
+                          </button>
+
+                          <div *ngIf="activeFilters['sa']" class="filter-popup">
+                            <div class="filter-popup-content">
+                              <div class="filter-search">
+                                <input type="text" placeholder="Search..." [(ngModel)]="filters['sa'].searchTerm"
+                                  (input)="applyFilter('sa')" />
+                              </div>
+                              <div class="filter-options">
+                                <label *ngFor="let option of filters['sa'].options" class="filter-option">
+                                  <input type="checkbox" [checked]="option.selected"
+                                    (change)="toggleFilterOption('sa', option)" />
+                                  {{ option.value }}
+                                </label>
+                              </div>
+
+                              <div class="filter-actions">
+                                <button type="button" (click)="clearFilter('sa')">
+                                  Clear
+                                </button>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+
+                      <!-- Address header -->
+                      <div class="excel-header-cell" *ngIf="getColumnByField('address')?.selected">
+                        <span>&#64;E/&#64;R</span>
+                        <div class="filter-container">
+                          <button class="filter-button" (click)="toggleFilter('address', $event)">
+                            <span class="material-icons">filter_list</span>
+                          </button>
+
+                          <div *ngIf="activeFilters['address']" class="filter-popup">
+                            <div class="filter-popup-content">
+                              <div class="filter-search">
+                                <input type="text" placeholder="Search..." [(ngModel)]="filters['address'].searchTerm"
+                                  (input)="applyFilter('address')" />
+                              </div>
+                              <div class="filter-options">
+                                <label *ngFor="
+                                    let option of filters['address'].options
+                                  " class="filter-option">
+                                  <input type="checkbox" [checked]="option.selected" (change)="
+                                      toggleFilterOption('address', option)
+                                    " />
+                                  {{ option.value }}
+                                </label>
+                              </div>
+
+                              <div class="filter-actions">
+                                <button type="button" (click)="clearFilter('address')">
+                                  Clear
+                                </button>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+
+                      <!-- Cible header -->
+                      <div class="excel-header-cell" *ngIf="getColumnByField('objectifCible')?.selected">
+                        <span>Objective Pack</span>
+                        <div class="filter-container">
+                          <button class="filter-button" (click)="toggleFilter('objectifCible', $event)">
+                            <span class="material-icons">filter_list</span>
+                          </button>
+
+                          <div *ngIf="activeFilters['objectifCible']" class="filter-popup">
+                            <div class="filter-popup-content">
+                              <div class="filter-search">
+                                <input type="text" placeholder="Search..." [(ngModel)]="
+                                    filters['objectifCible'].searchTerm
+                                  " (input)="applyFilter('objectifCible')" />
+                              </div>
+                              <div class="filter-options">
+                                <label *ngFor="
+                                    let option of filters['objectifCible']
+                                      .options
+                                  " class="filter-option">
+                                  <input type="checkbox" [checked]="option.selected" (change)="
+                                      toggleFilterOption(
+                                        'objectifCible',
+                                        option
+                                      )
+                                    " />
+                                  {{ option.value }}
+                                </label>
+                              </div>
+
+                              <div class="filter-actions">
+                                <button type="button" (click)="clearFilter('objectifCible')">
+                                  Clear
+                                </button>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+
+                      <!-- Etat ecu header -->
+                      <div class="excel-header-cell" *ngIf="getColumnByField('etatDev')?.selected">
+                        <span>Ecu Status</span>
+                        <div class="filter-container">
+                          <button class="filter-button" (click)="toggleFilter('etatDev', $event)">
+                            <span class="material-icons">filter_list</span>
+                          </button>
+
+                          <div *ngIf="activeFilters['etatDev']" class="filter-popup">
+                            <div class="filter-popup-content">
+                              <div class="filter-search">
+                                <input type="text" placeholder="Search..." [(ngModel)]="filters['etatDev'].searchTerm"
+                                  (input)="applyFilter('etatDev')" />
+                              </div>
+                              <div class="filter-options">
+                                <label *ngFor="
+                                    let option of filters['etatDev'].options
+                                  " class="filter-option">
+                                  <input type="checkbox" [checked]="option.selected" (change)="
+                                      toggleFilterOption('etatDev', option)
+                                    " />
+                                  {{ option.value }}
+                                </label>
+                              </div>
+
+                              <div class="filter-actions">
+                                <button type="button" (click)="clearFilter('etatDev')">
+                                  Clear
+                                </button>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+
+                      <!-- Type ecu header -->
+                      <div class="excel-header-cell" *ngIf="getColumnByField('typeDev')?.selected">
+                        <span>Ecu Type</span>
+                        <div class="filter-container">
+                          <button class="filter-button" (click)="toggleFilter('typeDev', $event)">
+                            <span class="material-icons">filter_list</span>
+                          </button>
+
+                          <div *ngIf="activeFilters['typeDev']" class="filter-popup">
+                            <div class="filter-popup-content">
+                              <div class="filter-search">
+                                <input type="text" placeholder="Search..." [(ngModel)]="filters['typeDev'].searchTerm"
+                                  (input)="applyFilter('typeDev')" />
+                              </div>
+                              <div class="filter-options">
+                                <label *ngFor="
+                                    let option of filters['typeDev'].options
+                                  " class="filter-option">
+                                  <input type="checkbox" [checked]="option.selected" (change)="
+                                      toggleFilterOption('typeDev', option)
+                                    " />
+                                  {{ option.value }}
+                                </label>
+                              </div>
+
+                              <div class="filter-actions">
+                                <button type="button" (click)="clearFilter('typeDev')">
+                                  Clear
+                                </button>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+
+                    <div class="excel-body">
+                      <ng-container
+                        *ngFor=" let family of readonly ? filteredFamilies: currentDetail.families;let fIndex = index">
+                        <ng-container *ngIf="family.ecus && family.ecus.length > 0">
+                          <ng-container *ngFor="let ecu of family.ecus; let eIndex = index">
+                            <div class="excel-row" [ngClass]="{ 'family-row': eIndex === 0 }">
+                              <!-- Family name (only shown in first row of each family) -->
+
+                              <div class="excel-cell family-cell" *ngIf="getColumnByField('famille')?.selected">
+                                <div class="family-content">
+                                  <span *ngIf="readonly">{{
+                                    family.name
+                                    }}</span>
+                                  <div *ngIf="!readonly" class="family-edit">
+                                    <button type="button" class="delete-button small-delete"
+                                      (click)="deleteFamily(fIndex)" title="Delete Row">
+                                      <span class="material-icons"><i class="fa fa-minus"></i></span>
+                                    </button>
+                                    <input type="text" class="excel-input" [(ngModel)]="family.name"
+                                      [name]="'familyName' + fIndex + eIndex" placeholder="Family Name" />
+                                  </div>
+                                </div>
+                              </div>
+
+                              <!-- Motorisation cell -->
+                              <div class="excel-cell" *ngIf="
+                                  getColumnByField('motorisation')?.selected
+                                ">
+                                <span *ngIf="readonly">{{
+                                  ecu.motorisation
+                                  }}</span>
+                                <input *ngIf="!readonly" type="text" class="excel-input-ecu"
+                                  [(ngModel)]="ecu.motorisation" [name]="'ecuMotorisation' + fIndex + eIndex"
+                                  required />
+                              </div>
+
+                              <!-- Type cell -->
+                              <div class="excel-cell" *ngIf="getColumnByField('type')?.selected">
+                                <span *ngIf="readonly">{{ ecu.type }}</span>
+                                <input *ngIf="!readonly" type="text" class="excel-input-ecu" [(ngModel)]="ecu.type"
+                                  [name]="'ecuType' + fIndex + eIndex" required />
+                              </div>
+
+                              <!-- ECU name cell -->
+                              <div class="excel-cell ecu-cell" *ngIf="getColumnByField('ecu')?.selected">
+                                <span *ngIf="readonly">{{ ecu.name }}</span>
+                                <input *ngIf="!readonly" type="text" class="excel-input-ecu" [(ngModel)]="ecu.name"
+                                  [name]="'ecuName' + fIndex + eIndex" required />
+                              </div>
+
+                              <!-- Reco cell -->
+                              <div class="excel-cell" *ngIf="getColumnByField('reco')?.selected">
+                                <span *ngIf="readonly">{{
+                                  ecu.reco || "NA"
+                                  }}</span>
+                                <input *ngIf="!readonly" type="text" class="excel-input-ecu" [(ngModel)]="ecu.reco"
+                                  [name]="'ecuReco' + fIndex + eIndex" />
+                              </div>
+
+                              <!-- Perimetre cell -->
+                              <div class="excel-cell perimetre-cell" *ngIf="getColumnByField('perimetre')?.selected">
+                                <span *ngIf="readonly">{{
+                                  ecu.perimetre || "NA"
+                                  }}</span>
+                                <input *ngIf="!readonly" type="text" class="excel-input-ecu" [(ngModel)]="ecu.perimetre"
+                                  [name]="'ecuPerimetre' + fIndex + eIndex" />
+                              </div>
+
+                              <!-- MPM cell -->
+                              <div class="excel-cell" *ngIf="getColumnByField('mpm')?.selected">
+                                <span *ngIf="readonly">{{
+                                  ecu.mpm || "0"
+                                  }}</span>
+                                <input *ngIf="!readonly" type="text" class="excel-input-ecu" [(ngModel)]="ecu.mpm"
+                                  [name]="'ecuMpm' + fIndex + eIndex" />
+                              </div>
+
+                              <!-- Ident cell -->
+                              <div class="excel-cell" *ngIf="getColumnByField('ident')?.selected">
+                                <span *ngIf="readonly">{{
+                                  ecu.ident || "0"
+                                  }}</span>
+                                <input *ngIf="!readonly" type="text" class="excel-input-ecu" [(ngModel)]="ecu.ident"
+                                  [name]="'ecuIdent' + fIndex + eIndex" />
+                              </div>
+
+                              <!-- TA cell -->
+                              <div class="excel-cell" *ngIf="getColumnByField('ta')?.selected">
+                                <span *ngIf="readonly">{{
+                                  ecu.ta || "NA"
+                                  }}</span>
+                                <input *ngIf="!readonly" type="text" class="excel-input-ecu" [(ngModel)]="ecu.ta"
+                                  [name]="'ecuTa' + fIndex + eIndex" />
+                              </div>
+
+                              <!-- FA cell -->
+                              <div class="excel-cell" *ngIf="getColumnByField('fa')?.selected">
+                                <span *ngIf="readonly">{{
+                                  ecu.fa || "NA"
+                                  }}</span>
+                                <input *ngIf="!readonly" type="text" class="excel-input-ecu" [(ngModel)]="ecu.fa"
+                                  [name]="'ecuFa' + fIndex + eIndex" />
+                              </div>
+
+                              <!-- Protocol cell -->
+                              <div class="excel-cell" *ngIf="getColumnByField('protocol')?.selected">
+                                <span *ngIf="readonly">{{ ecu.protocol }}</span>
+                                <input *ngIf="!readonly" type="text" class="excel-input-ecu" [(ngModel)]="ecu.protocol"
+                                  [name]="'ecuProtocol' + fIndex + eIndex" />
+                              </div>
+
+                              <!-- RespDev cell -->
+                              <div class="excel-cell repDev-cell" *ngIf="getColumnByField('respDev')?.selected">
+                                <span *ngIf="readonly">{{ ecu.respDev }}</span>
+                                <input *ngIf="!readonly" type="text" class="excel-input-ecu" [(ngModel)]="ecu.respDev"
+                                  [name]="'ecuRespDev' + fIndex + eIndex" />
+                              </div>
+                              <div class="excel-cell" *ngIf="getColumnByField('respDev')?.selected">
+                                <span *ngIf="readonly">{{
+                                  ecu.sa || "NA"
+                                  }}</span>
+                                <input *ngIf="!readonly" type="text" class="excel-input-ecu" [(ngModel)]="ecu.sa"
+                                  [name]="'ecuSa' + fIndex + eIndex" />
+                              </div>
+                              <div class="excel-cell" *ngIf="getColumnByField('respDev')?.selected">
+                                <span *ngIf="readonly">{{
+                                  ecu.address || "NA"
+                                  }}</span>
+                                <input *ngIf="!readonly" type="text" class="excel-input-ecu" [(ngModel)]="ecu.address"
+                                  [name]="'ecuaddress' + fIndex + eIndex" />
+                              </div>
+                              <div class="excel-cell" *ngIf="getColumnByField('respDev')?.selected">
+                                <span *ngIf="readonly">{{
+                                  ecu.objectifCible || "NA"
+                                  }}</span>
+                                <input *ngIf="!readonly" type="text" class="excel-input-ecu"
+                                  [(ngModel)]="ecu.objectifCible" [name]="'ecucible' + fIndex + eIndex" />
+                              </div>
+                              <div class="excel-cell etat-cell" *ngIf="getColumnByField('etatDev')?.selected">
+                                <span *ngIf="readonly">{{
+                                  ecu.etatDev || "NA"
+                                  }}</span>
+                                <input *ngIf="!readonly" type="text" class="excel-input-ecu" [(ngModel)]="ecu.etatDev"
+                                  [name]="'ecuEtatDev' + fIndex + eIndex" list="state-options" />
+                                <datalist id="state-options">
+                                  <option>Terminé</option>
+                                  <option>Dupliqué</option>
+                                  <option>Integré</option>
+                                  <option>En Cours</option>
+                                </datalist>
+                              </div>
+                              <div class="excel-cell" *ngIf="getColumnByField('typeDev')?.selected">
+                                <span *ngIf="readonly">{{
+                                  ecu.typeDev || "NA"
+                                  }}</span>
+                                <input *ngIf="!readonly" type="text" class="excel-input-ecu" [(ngModel)]="ecu.typeDev"
+                                  [name]="'ecuTypeDev' + fIndex + eIndex" list="type-options" />
+                                <datalist id="type-options">
+                                  <option name="1">
+                                    Nouveau développement
+                                  </option>
+                                  <option name="2">
+                                    Modification (ajout/suppression véhicule)
+                                  </option>
+                                  <option name="3">
+                                    Modification (correction annomalie)
+                                  </option>
+                                  <option name="4">
+                                    Modification (évolution cahier des charges)
+                                  </option>
+                                </datalist>
+                              </div>
+                            </div>
+                          </ng-container>
+                        </ng-container>
+
+                        <!-- Empty ECU row for families with no ECUs -->
+                        <div *ngIf="!family.ecus || family.ecus.length === 0" class="excel-row empty-ecu-row">
+                          <div class="excel-cell family-cell">
+                            <div class="family-content">
+                              <span *ngIf="readonly">{{ family.name }}</span>
+                              <div *ngIf="!readonly" class="family-edit">
+                                <input type="text" class="excel-input" [(ngModel)]="family.name"
+                                  [name]="'familyName' + fIndex" />
+                                <button type="button" class="delete-button small-delete" (click)="deleteFamily(fIndex)"
+                                  title="Delete Family">
+                                  <span class="material-icons">delete</span>
+                                </button>
+                              </div>
+                            </div>
+                          </div>
+                          <div class="empty-details-ecu" [attr.colspan]="15">
+                            <p *ngIf="readonly">No ECUs available</p>
+                            <p *ngIf="!readonly">
+                              Click "Add ECU" to add a new ECU to this family
+                            </p>
+                          </div>
+                          <div *ngIf="!readonly" class="excel-cell cell-small">
+                            <button type="button" class="add-button-ecu" (click)="addEcu(family)" title="Add ECU">
+                              <span class="material-icons">add</span>
+                            </button>
+                          </div>
+                        </div>
+                      </ng-container>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </ng-template>
+    </div>
+
+  </div>
+</form>
+
+<div *ngIf="errorMessage" class="error-notification">
+  {{ errorMessage }}
+</div>
